@@ -27,7 +27,7 @@ class LoginController extends Controller
             $session = $request->session()->regenerate();
             $id = Auth::user()->uuid;
 
-            return redirect()->intended('/home');
+            return redirect()->intended('/user/home');
         }
         return back()->with('error', 'Username atau Password Salah')
             ->withInput($request->only('username'));
