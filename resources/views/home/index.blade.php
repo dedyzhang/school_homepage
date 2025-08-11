@@ -50,21 +50,21 @@
     <div class="relative lg:rounded-full p-5 bg-white lg:max-w-[70%] mx-auto lg:-top-15 lg:shadow-xl">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <div class="icon-place flex justify-center items-center gap-3 header-icon flex-wrap md:flex-nowrap py-2 md:py-0">
-                <img class="size-40 md:size-30 reveal" src="{{ Vite::asset('resources/images/icon/header-icon1.png') }}" />
+                <img class="size-40 md:size-30 reveal" src="{{ Vite::asset('resources/images/Icon/header-icon1.png') }}" />
                 <div class="text-place w-full md:w-fit">
                     <p class="text-xl md:text-2xl font-semibold text-blue-950 text-center md:text-left">Daftar</p>
                     <p class="text-l md:text-xl font-semibold text-blue-950  text-center md:text-left">Sekolah Kami</p>
                 </div>
             </div>
             <div class="icon-place flex justify-center items-center gap-3 header-icon flex-wrap md:flex-nowrap py-2 md:py-0">
-                <img class="size-40 md:size-30 reveal-250" src="{{ Vite::asset('resources/images/icon/header-icon2.png') }}" />
+                <img class="size-40 md:size-30 reveal-250" src="{{ Vite::asset('resources/images/Icon/header-icon2.png') }}" />
                 <div class="text-place w-full md:w-fit">
                     <p class="text-xl md:text-2xl font-semibold text-blue-950 text-center md:text-left">Ngajar</p>
                     <p class="text-l md:text-xl font-semibold text-blue-950  text-center md:text-left">Bersama Kami</p>
                 </div>
             </div>
             <div class="icon-place flex justify-center items-center gap-3 header-icon flex-wrap md:flex-nowrap py-2 md:py-0">
-                <img class="size-40 md:size-30 reveal-500" src="{{ Vite::asset('resources/images/icon/header-icon3.png') }}" />
+                <img class="size-40 md:size-30 reveal-500" src="{{ Vite::asset('resources/images/Icon/header-icon3.png') }}" />
                 <div class="text-place w-full md:w-fit">
                     <p class="text-xl md:text-2xl font-semibold text-blue-950 text-center md:text-left">Keliling</p>
                     <p class="text-l md:text-xl font-semibold text-blue-950  text-center md:text-left">Sekolah Kami</p>

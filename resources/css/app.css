@@ -2,7 +2,7 @@
 @import "animate.css";
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
-@import "material-icons/iconfont/material-icons.css";
+@import "material-icons/Iconfont/material-icons.css";
 
 /* Flowbite */
 @import "flowbite/src/themes/default";
@@ -133,14 +133,14 @@ html {
     animation: tada 1s;
 }
 .section-1 {
-    background: url("../images/Icon/icon-airplane.svg") no-repeat top 50px left
+    background: url("../images/Icon/Icon-airplane.svg") no-repeat top 50px left
         120px;
     background-size: 100px;
 }
 .section-2 {
-    background: url("../images/Icon/icon-apple.svg") no-repeat bottom 50px right
+    background: url("../images/Icon/Icon-apple.svg") no-repeat bottom 50px right
             120px,
-        url("../images/Icon/icon-idea.svg") no-repeat top 50px left 120px,
+        url("../images/Icon/Icon-idea.svg") no-repeat top 50px left 120px,
         #f1f1f1;
     background-size: 70px;
 }
@@ -151,9 +151,9 @@ html {
         background-position: top 50px left 40px;
     }
     .section-2:after {
-        background: url("../images/Icon/icon-apple.svg") no-repeat bottom 50px
+        background: url("../images/Icon/Icon-apple.svg") no-repeat bottom 50px
                 right 30px,
-            url("../images/Icon/icon-idea.svg") no-repeat top 50px left 30px,
+            url("../images/Icon/Icon-idea.svg") no-repeat top 50px left 30px,
             #f1f1f1;
         background-size: 70px;
     }
@@ -164,9 +164,9 @@ html {
         background-size: 50px;
     }
     .section-2 {
-        background: url("../images/Icon/icon-apple.svg") no-repeat bottom 50px
+        background: url("../images/Icon/Icon-apple.svg") no-repeat bottom 50px
                 right 10px,
-            url("../images/Icon/icon-idea.svg") no-repeat top 50px left 10px,
+            url("../images/Icon/Icon-idea.svg") no-repeat top 50px left 10px,
             #f1f1f1;
         background-size: 70px;
     }
