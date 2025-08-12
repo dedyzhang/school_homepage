@@ -40,7 +40,7 @@ class LoginController extends Controller
         Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
-        return redirect('/signin')->with('success', 'Berhasil Logout');
+        return redirect('/user/signin')->with('success', 'Berhasil Logout');
     }
     /**
      * Ganti Password Pertama Kali
@@ -66,7 +66,7 @@ class LoginController extends Controller
             'password' => $password,
             'token' => 0,
         ]);
-        return redirect('/home')->with('success', 'Password berhasil diubah');
+        return redirect('/user/home')->with('success', 'Password berhasil diubah');
     }
     /**
      * Reset Password
