@@ -15,6 +15,7 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasUuids;
     protected $table = 'users';
+    protected $keyType = 'string';
     protected $primaryKey = 'uuid';
 
     /**
