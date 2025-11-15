@@ -3,6 +3,7 @@
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SpmbController;
 use App\Http\Middleware\isAdminandSuper;
 use App\Http\Middleware\isSuperAdmin;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,10 @@ Route::middleware('auth')->controller(LoginController::class)->group(function ()
     Route::get('/user/home', 'index')->name('home');
     Route::post('/user/ganti-password', 'gantiPassword')->name('user.gantiPassword');
     Route::post('/user/{uuid}/reset-password', 'resetPassword')->name('user.resetPassword');
+});
+Route::middleware('auth')->controller(SpmbController::class)->group(function() {
+    Route::get('/user/spmb','index')->name('spmb.index');
+    Route::get('/user/spmb/{sekolah}/show','show')->name('spmb.show');
 });
 Route::resource('user/user', \App\Http\Controllers\UserController::class)->middleware(isSuperAdmin::class);
 Route::resource('user/sekolah', \App\Http\Controllers\SekolahController::class)->middleware(isSuperAdmin::class)->except('show');

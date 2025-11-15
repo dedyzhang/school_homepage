@@ -221,3 +221,6 @@ html {
 .has-bulleting ul {
     list-style: circle !important;
 }
+.button-d {
+    @apply px-3 py-2 rounded-lg focus:outline-0 focus:ring-5;
+}
