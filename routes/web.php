@@ -42,6 +42,7 @@ Route::middleware('auth')->controller(LoginController::class)->group(function ()
 Route::middleware('auth')->controller(SpmbController::class)->group(function() {
     Route::get('/user/spmb','index')->name('spmb.index');
     Route::get('/user/spmb/{sekolah}/show','show')->name('spmb.show');
+    Route::get('/user/spmb/{sekolah}/settings','settings')->name('spmb.settings');
 });
 Route::resource('user/user', \App\Http\Controllers\UserController::class)->middleware(isSuperAdmin::class);
 Route::resource('user/sekolah', \App\Http\Controllers\SekolahController::class)->middleware(isSuperAdmin::class)->except('show');

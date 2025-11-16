@@ -22,4 +22,8 @@ class SpmbController extends Controller
         $sekolah = Sekolah::findOrFail($sekolah);
         return view('spmb.show',compact('sekolah'));
     }
+    public function settings(String $sekolah) {
+        $sekolah = Sekolah::findOrFail($sekolah);
+        return view('spmb.settings',compact('sekolah'));
+    }
 }
