@@ -2,8 +2,9 @@
 
 @section('container')
     <div class="p-4 bg-white rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4">Welcome to the Dashboard</h1>
-        <p class="text-gray-600">Halaman Utama Dashboard</p>
+        <h1 class="text-2xl font-bold mb-4">Selamat Datang</h1>
+        <p class="text-gray-600">Halaman Utama Aplikasi</p>
+        <p>Selamat Datang di aplikasi Maitreyawira Tanjungpinang</p>
         {{-- Add your dashboard content here --}}
         <div class="mt-6">
             <div class="grid grid-cols-1 sm:grid-cols-6">
@@ -50,5 +51,60 @@
             </div>
         </div>
     </div>
+    @if ($user->access == 'siswa')
+        <div class="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 mt-5 gap-5">
+            <div class="col-span-1">
+                <div class="rounded-lg bg-white shadow-md p-5">
+                    <p class="text-base"><b>Status Upload Berkas</b></p>
+                    <div>
+                        <div>
+                            <div class="flex flex-col md:grid grid-cols-12 text-gray-50">
+                                @foreach ($berkas_w as $berkas)
+                                    @php
+                                        $nama_berkas = $berkas['nama_berkas'];
+                                        $find = current(array_filter($berkas_siswa,function($item) use ($nama_berkas) {
+                                            return $item['nama_berkas'] == $nama_berkas;
+                                        }));
 
+                                        if($find != null) {
+                                            $found = true;
+                                        } else {
+                                            $found = false;
+                                        }
+                                    @endphp
+                                    <div class="flex md:contents">
+                                        <div class="col-start-1 col-end-2 mr-10 md:mx-auto relative">
+                                            <div class="h-full w-6 flex items-center justify-center">
+                                            <div class="h-full w-1 @if($found) bg-green-500 @else bg-red-400 @endif pointer-events-none"></div>
+                                            </div>
+                                            <div class="w-6 h-6 absolute top-1/2 -mt-3 rounded-full @if($found) bg-green-500 @else bg-red-400 @endif shadow text-center">
+                                                @if($found)
+                                                    <span class="material-icons-round" style="font-size: 22px; margin-top:2px; margin-left:-1px">check_circle</span>
+                                                @else
+                                                    <span class="material-icons-round" style="font-size: 22px; margin-top:2px; margin-left:-1px">close</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="@if($found) bg-green-500 @else bg-red-400 @endif col-start-2 col-end-12 py-2 px-4 rounded-xl my-3 mr-auto shadow-md w-full">
+                                            <h3 class="font-semibold text-base mb-1">{{$berkas['nama_berkas']}}</h3>
+                                            <p class="leading-tight text-justify w-full">
+                                                @if($found) Sudah Diunggah/Upload @else Belum Terunggah/Upload @endif
+                                            </p>
+                                        </div>
+                                    </div>    
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-1">
+                <div class="rounded-lg bg-white shadow-md p-5">
+                    <h5 class="text-base"><b>Hasil SPMB</b></h5>
+                    <p>Pengumuman Penerimaan Siswa Baru untuk Tahun Ajaran yang akan datang belum dibuka. Kami mengimbau orang tua/wali murid dan calon pendaftar untuk mengecek website ini secara berkala guna memperoleh informasi terbaru terkait</p>
+                </div>
+            </div>
+        </div>
+    @endif
+    
 @endsection

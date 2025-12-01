@@ -15,7 +15,7 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+    --font-sans: ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
 }
@@ -221,6 +221,54 @@ html {
 .has-bulleting ul {
     list-style: circle !important;
 }
+.has-bulleting.informasi ul {
+    list-style: circle !important;
+}
+.has-bulleting .initial-wrapper table {
+    display: table;
+    max-width: 100% !important;
+    height: fit-content !important;
+    overflow-x: auto !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+}
+@media screen and (max-width:700px) {
+    .has-bulleting .initial-wrapper table {
+        display: block !important;
+    }
+}
 .button-d {
     @apply px-3 py-2 rounded-lg focus:outline-0 focus:ring-5;
+}
+
+.background-horizontalscroll {
+    animation-name: slide-horizontal !important; /* Name of your keyframes */
+    animation-duration: 15s; /* How long the animation takes */
+    animation-timing-function: ease-in-out; /* Speed curve of the animation */
+    animation-iteration-count: infinite; /* How many times the animation repeats (e.g., 'infinite' for continuous) */
+    animation-direction: alternate; /* Plays forwards then backwards for a smooth loop */
+}
+.long-horizontal {
+    animation-name: slide-horizontal !important; /* Name of your keyframes */
+    animation-duration: 30s;/* How long the animation takes */
+    animation-iteration-count: infinite; /* How many times the animation repeats (e.g., 'infinite' for continuous) */
+    animation-timing-function: ease-in-out; /* Speed curve of the animation */
+    animation-direction: alternate; /* Plays forwards then backwards for a smooth loop */
+}
+
+@media screen and (max-width:700px) {
+    .long-horizontal {
+        animation-name: slide-horizontal !important; /* Name of your keyframes */
+        animation-duration: 45s;/* How long the animation takes */
+        animation-iteration-count: infinite; /* How many times the animation repeats (e.g., 'infinite' for continuous) */
+    }
+}
+
+@keyframes slide-horizontal {
+    from {
+    object-position: 0%; /* Starting position */
+    }
+    to {
+    object-position: 100%; /* Ending position (e.g., 200px to the right) */
+    }
 }

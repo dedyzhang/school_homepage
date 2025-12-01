@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nis')->unique();
             $table->string('password');
             $table->string('biodata');
-            $table->string('dokumen');
+            $table->string('dokumen')->nullable();
             $table->string('status')->nullable()->default('mendaftar');
             $table->string('VA')->nullable();
             $table->string('keterangan')->nullable();

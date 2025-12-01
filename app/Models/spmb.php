@@ -17,6 +17,7 @@ class spmb extends Model
         'password',
         'biodata',
         'dokumen',
+        'gelombang',
         'status',
         'VA',
         'keterangan',

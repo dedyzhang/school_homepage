@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Sekolah::class, 'tingkat');
     }
+
+    public function siswa() : BelongsTo
+    {
+        return $this->belongsTo(spmb::class, 'username', 'nis');
+    }
 }

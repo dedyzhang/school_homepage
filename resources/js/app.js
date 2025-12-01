@@ -182,15 +182,20 @@ ScrollReveal().reveal(".reveal-1000", {
     easing: "ease-in-out",
     delay: 1000,
 });
-const dataTable = new DataTable("#table-sekolah", {
-    searchable: true,
-    sortable: true,
-    pagination: true,
-    perPage: 10,
-    perPageSelect: [10, 25, 50, 100],
-    labels: {
-        placeholder: "Cari...",
-        perPage: "baris per halaman",
-        noRows: "Tidak ada data yang ditemukan",
-    },
-});
+
+if (document.getElementById("table-sekolah")) {
+    const dataTable = new DataTable("#table-sekolah", {
+        searchable: true,
+        sortable: true,
+        pagination: true,
+        perPage: 10,
+        perPageSelect: [10, 25, 50, 100],
+        labels: {
+            placeholder: "Cari...",
+            perPage: "baris per halaman",
+            noRows: "Tidak ada data yang ditemukan",
+        },
+    });
+}
+import Mask from "jquery-mask-plugin";
+window.mask = Mask;

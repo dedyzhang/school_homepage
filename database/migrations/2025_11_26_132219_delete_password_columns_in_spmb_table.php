@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('spmb_settings', function (Blueprint $table) {
-            $table->uuid()->primary();
-            $table->foreignUuid('id_sekolah');
-            $table->string('jenis')->nullable();
-            $table->text('nilai')->nullable();
-            $table->timestamps();
+        Schema::table('spmb', function (Blueprint $table) {
+            $table->dropColumn('password');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('spmb_settings');
+        Schema::table('spmb', function (Blueprint $table) {
+            $table->string('password')->nullable();
+        });
     }
 };

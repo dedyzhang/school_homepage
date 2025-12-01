@@ -18,7 +18,7 @@
     </head>
     <body class="antialiased bg-gray-200 flex justify-center items-center h-screen w-screen">
         <div class="login-box bg-white py-5 px-3 rounded-xl w-80 md:w-96">
-            <h4 class="font-black">LOGIN ADMIN PANEL</h4>
+            <h4 class="font-black">LOGIN</h4>
             @if(session('error'))
                 {{-- Error Alerts --}}
                 <div id="alert-1" class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
@@ -41,12 +41,12 @@
                 @csrf
                 <div class="grid w-full gap-2 mt-3">
                     <div class="form-group">
-                        <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Induk Karyawan</label>
+                        <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIS / NIK Anda</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                 <i class="material-icons-outlined text-gray-400" style="font-size:20px">account_circle</i>
                             </div>
-                            <input type="text" class="@error('username') bg-red-50 border border-red-500 text-red-900 placeholder-red-700 focus:ring-red-200 focus:border-red-500 @else bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-200 focus:border-blue-500 @enderror text-sm rounded-lg  focus:outline-0 block w-full ps-10 p-2.5" placeholder="Masukkan NIK Anda" name="username" id="username" value="{{ old('username') }}" />
+                            <input type="text" class="@error('username') bg-red-50 border border-red-500 text-red-900 placeholder-red-700 focus:ring-red-200 focus:border-red-500 @else bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-200 focus:border-blue-500 @enderror text-sm rounded-lg  focus:outline-0 block w-full ps-10 p-2.5" placeholder="Masukkan NIS (Siswa) atau NIK (Guru)" name="username" id="username" value="{{ old('username') }}" />
 
                         </div>
                         @error('username')
