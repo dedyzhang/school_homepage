@@ -19,34 +19,35 @@
             </svg>
         </button>
         </div>
-        <div class="hidden lg:flex lg:gap-x-8">
-        <div class="relative">
-            <button type="button" class="flex items-center text-sm/6 font-semibold ganti-warna text-white has-submenu hover:text-blue-900" data-target="#menu-sekolah"  aria-expanded="false">
-                Sekolah
-                <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                </svg>
-            </button>
-        </div>
-        <div class="relative">
-            <button type="button" class="flex items-center text-sm/6 font-semibold ganti-warna text-white has-submenu hover:text-blue-900" data-target="#menu-tentang" aria-expanded="false">
-                Tentang Sekolah
-                <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                </svg>
-            </button>
-        </div>
-        <div class="relative">
-            <button type="button" class="flex items-center text-sm/6 font-semibold ganti-warna text-white has-submenu hover:text-blue-900" data-target="#menu-bergabung" aria-expanded="false">
-                Bergabung
-                <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                </svg>
-            </button>
-        </div>
-        <a href="#" class="text-sm/6 font-semibold text-white ganti-warna">Galeri</a>
-        <a href="{{ route('home.berita') }}" class="text-sm/6 font-semibold text-white ganti-warna">Berita</a>
-        <a href="#" class="text-sm/6 font-semibold text-white ganti-warna">Contact Us</a>
+        <div class="hidden lg:flex lg:gap-x-8 items-center">
+            <div class="relative">
+                <button type="button" class="flex items-center text-sm/6 font-semibold ganti-warna text-white has-submenu hover:text-blue-900" data-target="#menu-sekolah"  aria-expanded="false">
+                    Sekolah
+                    <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                        <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <div class="relative">
+                <button type="button" class="flex items-center text-sm/6 font-semibold ganti-warna text-white has-submenu hover:text-blue-900" data-target="#menu-tentang" aria-expanded="false">
+                    Tentang Sekolah
+                    <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                        <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <div class="relative">
+                <button type="button" class="flex items-center text-sm/6 font-semibold ganti-warna text-white has-submenu hover:text-blue-900" data-target="#menu-bergabung" aria-expanded="false">
+                    Bergabung
+                    <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                        <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <a href="#" class="text-sm/6 font-semibold text-white ganti-warna">Galeri</a>
+            <a href="{{ route('home.berita') }}" class="text-sm/6 font-semibold text-white ganti-warna">Berita</a>
+            <a href="#" class="text-sm/6 font-semibold text-white ganti-warna">Contact Us</a>
+            <a href="/user/signin" class="text-sm/6 font-semibold bg-blue-400 text-white px-2 py-2 rounded-lg">Login</a>
         </div>
     </nav>
     <!-- Mobile menu, show/hide based on menu open state. -->
@@ -115,7 +116,7 @@
                         </button>
                         <!-- 'Product' sub-menu, show/hide based on menu state. -->
                         <div class="space-y-2 max-h-0 transition-all ease-out duration-300 invisible opacity-0"id="disclosure-3">
-                            <a href="#" class="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Sistem Penerimaan Sistem Baru</a>
+                            <a href="{{ route('home.spmb.index') }}" class="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Sistem Penerimaan Sistem Baru</a>
                             <a href="#" class="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Lowongan Kerja</a>
 
                         </div>
@@ -123,6 +124,7 @@
                     <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Galeri</a>
                     <a href="{{ route('home.berita') }}" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Berita</a>
                     <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Contact Us</a>
+                    <a href="/user/signin" class="-mx-3 block rounded-lg px-3 py-2 bg-blue-400 rounded-lg text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Login</a>
                 </div>
                 {{-- <div class="py-6">
                     <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Log in</a>
@@ -299,7 +301,7 @@
                         <h3 class="text-md font-medium text-gray-900 mb-3">
                             Sistem Penerimaan Siswa Baru
                         </h3>
-                        <button class="w-full rounded-md px-3 py-2 bg-amber-300 font-semibold focus:bg-amber-400 text-xs">Pelajari Selengkapnya</button>
+                        <a href="{{ route('home.spmb.index') }}" class="block w-full rounded-md px-3 py-2 bg-amber-300 font-semibold focus:bg-amber-400 text-center">Pelajari Selengkapnya</a>
                     </div>
                 </div>
             </div>

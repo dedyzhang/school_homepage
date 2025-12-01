@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sekolah;
+use App\Models\spmb;
+use App\Models\spmbSettings;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +15,26 @@ class LoginController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('auth.home', compact('user'));
+        if($user->access == 'siswa') {
+            $sekolah = Sekolah::where('kode', $user->tingkat)->first();
+            $berkas_wajib = spmbSettings::where([['id_sekolah','=',$sekolah->uuid],['jenis','=','berkas_spmb']])->first();
+
+            if($berkas_wajib != null) {
+                $berkas_w = unserialize($berkas_wajib->nilai);
+            } else {
+                $berkas_w = array();
+            }
+
+            $spmb_siswa = spmb::where('nis',$user->username)->first();
+            if($spmb_siswa->dokumen != "") {
+                $berkas_siswa = unserialize($spmb_siswa->dokumen);
+            } else {
+                $berkas_siswa = array();
+            }
+            return view('auth.home', compact('user','berkas_w','berkas_siswa'));
+        } else {
+            return view('auth.home', compact('user'));
+        }
     }
     public function login(Request $request)
     {
