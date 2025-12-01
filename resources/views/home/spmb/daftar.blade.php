@@ -4,7 +4,7 @@
     <div id="first-div" class="flex items-center justify-between p-0 m-0 top-0 left-0 w-auto overflow-x-hidden header-besar">
         <div class="w-screen">
             <div class="relative h-[500] w-screen bg-black/50">
-                <img class="w-screen h-[500] background-horizontalscroll object-cover brightness-75" src="{{ Vite::asset('resources/images/header/spmb.jpg') }}"/>
+                <img class="w-screen h-[500] background-horizontalscroll object-cover brightness-75" src="{{ Vite::asset('resources/images/header/spmb.svg') }}"/>
                 <div class="absolute w-screen h-full top-0 text-white pt-10 pb-10 md:ps-20">
                     <div class="flex sm:inline-flex items-center justify-center sm:items-center h-full flex-wrap">
                         <div class="text-place sm:ms-10 text-center sm:text-left">
