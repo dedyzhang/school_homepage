@@ -50,12 +50,16 @@ Route::middleware('auth')->controller(LoginController::class)->group(function ()
 Route::middleware(isAdminandSuper::class)->controller(SpmbController::class)->group(function() {
     Route::get('/user/spmb','index')->name('spmb.index');
     Route::get('/user/spmb/{sekolah}/show','show')->name('spmb.show');
+    Route::get('/user/spmb/settings','settingsIndex')->name('spmb.settings.index');
     Route::get('/user/spmb/{sekolah}/settings','settings')->name('spmb.settings');
     Route::post('/user/spmb/{sekolah}/settings/store','formulirStore')->name('spmb.settings.formulir.store');
     Route::post('/user/spmb/{sekolah}/settings/mode/store','modeStore')->name('spmb.settings.mode.store');
     Route::post('/user/spmb/{sekolah}/settings/berkas/store','berkasStore')->name('spmb.settings.berkas.store');
     Route::delete('/user/spmb/{sekolah}/settings/berkas/delete','berkasDelete')->name('spmb.settings.berkas.delete');
     Route::post('/user/spmb/{sekolah}/settings/status/store','statusStore')->name('spmb.settings.status.store');
+    Route::post('/user/spmb/{sekolah}/settings/interview/store','spmbInterviewStore')->name('spmb.settings.interview.store');
+    Route::delete('/user/spmb/{sekolah}/settings/interview/delete','spmbInterviewDelete')->name('spmb.settings.interview.delete');
+    Route::post('/user/spmb/{sekolah}/settings/hasil/store','spmbdescHasilStore')->name('spmb.settings.deschasil.store');
     Route::get('/user/spmb/{uuid}/detail','detailSiswa')->name('spmb.siswa.detail');
     Route::get('/user/spmb/{uuid}/upload','uploadSiswa')->name('spmb.siswa.get.upload');
     Route::post('/user/spmb/{uuid}/upload/store','AdminUploadDokumenStore')->name('spmb.admin.upload.store');
@@ -67,6 +71,15 @@ Route::middleware(isAdminandSuper::class)->controller(SpmbController::class)->gr
     Route::post('/user/spmb/{uuid}/delete','spmbDelete')->name('spmb.delete');
     Route::get('/user/spmb/{uuid}/informasi','spmbInformasi')->name('spmb.informasi');
     Route::post('/user/spmb/{uuid}/informasi/store','spmbInformasiStore')->name('spmb.informasi.store');
+    Route::get('/user/spmb/{uuid}/cetak/siswa','cetakDaftarSiswa')->name('spmb.cetak.siswa');
+    Route::get('/user/spmb/interview','spmbInterviewIndex')->name('spmb.interview.index');
+    Route::get('/user/spmb/interview/{uuid}/show','spmbInterviewShow')->name('spmb.interview.show');
+    Route::get('/user/spmb/interview/{uuid}/edit','spmbInterviewEdit')->name('spmb.interview.edit');
+    Route::post('/user/spmb/interview/{uuid}/update','spmbInterviewUpdate')->name('spmb.interview.update');
+    Route::get('/user/spmb/hasil','spmbHasilIndex')->name('spmb.hasil.index');
+    Route::get('/user/spmb/{uuid}/hasil','spmbHasilShow')->name('spmb.hasil.show');
+    Route::post('/user/spmb/hasil/{uuid}/update','spmbHasilUpdate')->name('spmb.hasil.update');
+    
 });
 Route::resource('user/user', \App\Http\Controllers\UserController::class)->middleware(isSuperAdmin::class);
 Route::resource('user/sekolah', \App\Http\Controllers\SekolahController::class)->middleware(isSuperAdmin::class)->except('show');
@@ -79,4 +92,5 @@ Route::middleware(isSiswa::class)->controller(SpmbController::class)->group(func
     Route::post('/user/spmb/upload','uploadDokumenStore')->name('spmb.siswa.upload.store');
     Route::post('/user/spmb/delete','deleteDokumen')->name('spmb.siswa.delete.berkas');
     Route::get('/user/spmb/identitas','identitas')->name('spmb.siswa');
+    Route::get('/user/spmb/{uuid}/cetak/hasil','cetakHasilSiswa')->name('spmb.cetak.hasil');
 });

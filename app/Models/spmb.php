@@ -14,12 +14,14 @@ class spmb extends Model
     protected $fillable = [
         'id_sekolah',
         'nis',
-        'password',
         'biodata',
         'dokumen',
+        'interview',
         'gelombang',
         'status',
         'VA',
+        'bank',
+        'biaya',
         'keterangan',
     ];
 }

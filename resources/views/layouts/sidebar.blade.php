@@ -40,10 +40,27 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('spmb.index') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 cursor-pointer" aria-controls="dropdown-spmb" data-collapse-toggle="dropdown-spmb">
                     <span class="material-icons-round w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true">how_to_reg</span>
-                    <span class="ms-3">SPMB</span>
-                </a>
+                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">SPMB</span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <ul id="dropdown-spmb" class="hidden py-2 space-y-2">
+                    <li>
+                        <a href="{{ Route('spmb.index') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Data Siswa</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('spmb.interview.index') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Data Interview</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('spmb.hasil.index') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Hasil SPMB</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('spmb.settings.index') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Setting SPMB</a>
+                    </li>
+                </ul>
             </li>
             @endcanany
             @can('siswa')

@@ -109,14 +109,14 @@
                 $.ajax({
                     type: "post",
                     url : "{{ route('spmb.siswa.delete.berkas') }}",
-                    headers: {'X-CSRF_TOKEN' : '{{ csrf_token() }}'},
+                    headers: {'X-CSRF-TOKEN' : '{{ csrf_token() }}'},
                     data: {'berkas' : file},
                     success : function(data) {
                         removeLoading();
                         cAlert("green","Berhasil","Gambar Berhasil Dihapus",true);
                     },
                     error: function(data) {
-                        console.log(data.responseText.message);
+                        console.log(data.responseJSON.message);
                     }
                 })
             });

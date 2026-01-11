@@ -617,6 +617,97 @@
             </div>
         </div>
     </div>
+    {{-- Setting Apa yang masuk dalam formulir Interview SPMB --}}
+    <div class="p-4 bg-white rounded-lg shadow-md mt-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <div class="col-span-1 sm:col-span-2 md:col-span-3">
+                <h4 class="text-lg m-0 p-0"><b>Pengaturan Form Interview</b></h4>
+                <p class="text-sm">Tambahkan dan Edit Kuestioner yang akan ditampilkan dalam formulir Interview. Pastikan tidak melakukan penambahan atau pengeditan formulir setelah siswa mengisi kuestioner interviewnya</p>
+            </div>
+            <div class="col-span-1 sm:col-span-1 md:col-span-1 mt-1 md:mt-3">
+                <label for="jenis">Jenis Kuestioner</label>
+                <select name="jenis" id="jenis" class="w-full mt-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="teks">Teks Singkat</option>
+                    <option value="longteks">Paragraf</option>
+                    <option value="option">Opsi ( Jawaban Hanya 1 )</option>
+                    <option value="checkbox">Checkbox ( Jawaban Lebih dari 1 )</option>
+                </select>
+            </div>
+            <div class="col-span-1 sm:col-span-1 md:col-span-2 mt-1 md:mt-3">
+                <label for="kuestioner">Soal Kuestioner</label>
+                <input type="text" name="kuestioner" id="kuestioner" class="w-full mt-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Soal Kuestioner Interview">
+            </div>
+            {{-- Option and checbox options --}}
+            <div class="col-span-1 sm:col-span-2 md:col-span-3 optionKuestioner hidden flex-wrap">
+                <ul class="kuestioner-opsi w-full">
+                    <li class="inline-block w-full mt-1">
+                        <label for="opsi" class="me-2">1</label>
+                        <input type="text" name="opsi" id="opsi" class="w-3/4 mt-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Opsi Jawaban Kuestioner">
+                    </li>
+                    <li class="inline-block w-full mt-1">
+                        <label for="opsi" class="me-2">2</label>
+                        <input type="text" name="opsi" id="opsi" class="w-3/4 mt-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Opsi Jawaban Kuestioner">
+                    </li>
+                    <li class="inline-block w-full mt-1">
+                        <label for="opsi" class="me-2">3</label>
+                        <input type="text" name="opsi" id="opsi" class="w-3/4 mt-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Opsi Jawaban Kuestioner">
+                    </li>
+                    <li class="inline-block w-full mt-1">
+                        <label for="opsi" class="me-2">4</label>
+                        <input type="text" name="opsi" id="opsi" class="w-3/4 mt-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Opsi Jawaban Kuestioner">
+                    </li>
+                </ul>
+                <div class="mt-2 button-place w-full">
+                    <button class="px-2 py-1.5 bg-amber-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 cursor-pointer add-kuestioner">
+                        <span class="material-icons-round" style="font-size: 20px;">add</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-span-1 sm:col-span-2 md:col-span-3 button-place">
+                <button class="w-full sm:w-auto bg-blue-600 hover:bg-blue-950 text-white px-2.5 py-1.5 rounded-lg cursor-pointer mt-3 simpan-kuestioner">Simpan Kuestioner Interview</button>
+            </div>
+
+            <div class="col-span-1 sm:col-span-2 md:col-span-3">
+                <p class="title text-base mt-3"><b>List Kuestioner SPMB</b></p>
+                @foreach ($interview_kuestioner as $item)
+                    <div class="kuestioner-item py-5 border-b border-gray-300 relative">
+                        <p class="inline-flex align-items-center"><span class="material-icons-round me-2">assignment</span> <b>{{ $item['jenis'] }}</b></p>
+                        <p class="mt-1 p-0">{{$item['kuestioner']}}</p>
+                        @if($item['jenis'] == 'option' || $item['jenis'] == 'checkbox')
+                            <ul class="mt-2 mr-4">
+                                @foreach ($item['opsi'] as $opsi)
+                                    <li class="list-disc list-inside text-sm text-gray-700">{{ $opsi }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                        <button class="absolute top-5 right-5 text-red-600 hover:text-red-800 px-1 py-1 hover:bg-neutral-50 rounded-lg cursor-pointer delete-kuestioner-item" data-id="{{ $item['id_kuestioner'] }}"><span class="material-icons-round" style="font-size: 24px">delete_outline</span></button>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    {{-- Setting kata kata yang ditampilkan pada hasil Seleksi SPMB --}}
+    <div class="p-4 bg-white rounded-lg shadow-md mt-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-2 ">
+            <div class="col-span-1 md:col-span-2 lg:col-span-4">
+                <h4 class="text-lg"><b>Pengaturan Deskripsi Hasil SPMB</b></h4>
+                <p class="text-sm">Atur Pengaturan Deskripsi Hasil SPMB</p>
+            </div>
+            <div class="col-span-1 md:col-span-2 lg:col-span-4">
+                <form method="POST" action="{{ route('spmb.settings.deschasil.store', $sekolah->uuid) }}" class="mt-4">
+                    @csrf
+                    <label for="desc_hasil" class="block text-sm mb-2">Informasi SPMB</label>
+                    <textarea id="textarea-tinymce" name="desc_hasil" rows="10">{{old('desc_hasil',$deskripsi)}}</textarea>
+                    @error('desc_hasil')
+                        <p class="text-xs text-red-600 dark:text-red-500 mt-1"><span class="font-medium">Perhatian!</span> {{ $message }}</p>
+                    @enderror
+                    <div class="mt-4">
+                        <button type="submit" class="button-d bg-blue-500 hover:bg-blue-600 focus:ring-blue-300">Simpan Deskripsi Hasil SPMB</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script type="module">
         $('.hapus-berkas').on('click', function() {
             var namaBerkas = $(this).data('file');
@@ -640,6 +731,112 @@
                     }
                 })
             });
+        });
+        $('#jenis').on('change',function() {
+            if($(this).val() == 'option' || $(this).val() == 'checkbox') {
+                $('.optionKuestioner').addClass('flex').removeClass('hidden');
+
+                $('.add-kuestioner').on('click',function() {
+                    var countOpsi = $('.kuestioner-opsi li').length + 1;
+                    var newOpsi = `<li class="inline-block w-full mt-1">
+                        <label for="opsi" class="me-2">`+countOpsi+`</label>
+                        <input type="text" name="opsi" id="opsi" class="w-3/4 mt-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan Opsi Jawaban Kuestioner">
+                        <button class="px-2 py-1.5 bg-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-700 text-white cursor-pointer delete-kuestioner"><span class="material-icons-round" style="font-size: 20px;">delete</span></button>
+                    </li>`;
+                    $('.kuestioner-opsi').append(newOpsi);
+                });
+                $('.optionKuestioner').on('click','.delete-kuestioner',function(){
+                    $(this).parent().remove();
+                });
+            } else {
+                $('.optionKuestioner').addClass('hidden').removeClass('flex');
+            }
+        });
+        $('.simpan-kuestioner').on('click',function() {
+            var jenis = $('#jenis').val();
+            var kuestioner = $('#kuestioner').val();
+            var opsiJawaban = [];
+            var idSekolah = "{{ $sekolah->uuid }}";
+            if(jenis == '' || kuestioner == '') {
+                oAlert('red','Gagal','Jenis dan Kuestioner harus diisi');
+                return false;
+            } else {
+                if(jenis == 'option' || jenis == 'checkbox') {
+                    $('.kuestioner-opsi input[name="opsi"]').each(function() {
+                        if($(this).val() != '') {
+                            opsiJawaban.push($(this).val());
+                        }
+                    });
+                    if(opsiJawaban.length < 2) {
+                        oAlert('red','Gagal','Untuk jenis opsi dan checkbox minimal harus ada 2 opsi jawaban');
+                        return false;
+                    }
+                }
+                loading();
+                var url = "{{ route('spmb.settings.interview.store',':id') }}";
+                url = url.replace(':id',idSekolah);
+                $.ajax({
+                    type : 'POST',
+                    url : url,
+                    data : {
+                        jenis : jenis,
+                        kuestioner : kuestioner,
+                        option : opsiJawaban
+                    },
+                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                    success: function(data) {
+                        removeLoading();
+                        if(data.success) {
+                            cAlert('green','Berhasil',data.success,true);
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data.responseJSON.message);
+                    }
+                })
+            }
+
+        });
+        $('.delete-kuestioner-item').on('click',function() {
+            var idKuestioner = $(this).data('id');
+            var idSekolah = "{{ $sekolah->uuid }}";
+            cConfirm('Perhatian','Yakin untuk menghapus kuestioner ini?',function() {
+                loading();
+                var url = "{{ route('spmb.settings.interview.delete',':id') }}";
+                url = url.replace(':id',idSekolah);
+                $.ajax({
+                    type : 'DELETE',
+                    url : url,
+                    data : {id_kuestioner : idKuestioner},
+                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                    success: function(data) {
+                        removeLoading();
+                        if(data.success) {
+                            cAlert('green','Berhasil',data.success,true);
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data.responseJSON.message);
+                    }
+                })
+            });
+        });
+        tinymce.init({
+            selector: "#textarea-tinymce",
+            theme: 'silver',
+            plugins: 'fullscreen, link, image, table, code, lists, emoticons, advlist, charmap, searchreplace, codesample',
+            toolbar: [
+            'undo redo | forecolor backcolor | formatting | align | outdent indent lineheight |  numlist bullist | blockquote | link | image | table | code | template | symbol | searchreplace | fullscreen ',
+            'sizeselect | styles fontfamily | fontsize'
+            ],
+            content_style: "body {line-height: 2}",
+            setup: function (editor) {
+                editor.on('init', function () {
+                // Example: Wrap the entire content in a div on initialization
+                let content = editor.getContent();
+                editor.setContent('<div class="initial-wrapper">' + content + '</div>');
+                });
+            },
         });
     </script>
 @endsection

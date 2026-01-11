@@ -98,12 +98,42 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-1">
+            @if ($spmb_siswa->keterangan != null && $spmb_siswa->keterangan == 1)
+                @php
+                    $dataSiswa = unserialize($spmb_siswa->biodata);
+                @endphp
                 <div class="rounded-lg bg-white shadow-md p-5">
                     <h5 class="text-base"><b>Hasil SPMB</b></h5>
-                    <p>Pengumuman Penerimaan Siswa Baru untuk Tahun Ajaran yang akan datang belum dibuka. Kami mengimbau orang tua/wali murid dan calon pendaftar untuk mengecek website ini secara berkala guna memperoleh informasi terbaru terkait</p>
+                    <p>Dengan hormat,</p>
+                    <p class="text-justify">Berdasarkan hasil seleksi Sistem Penerimaan Murid Baru (SPMB) {{$sekolah->nama}}</p>
+                    <ul class="mt-2 list-disc list-inside">
+                        <li>Nama Siswa : {{$dataSiswa['nama']}}</li>
+                        <li>NIS Pendaftaran : {{$spmb_siswa->nis}}</li>
+                    </ul>
+                    @if ($spmb_siswa->status == 'lulus')
+                        <p class="mt-3 text-justify">DINYATAKAN <b class="text-bold">DITERIMA</b> sebagai peserta didik di {{$sekolah->nama}}.</p>
+                        <p class="text-justify">Berikut adalah Informasi Pembayaran Sistem Penerimaan Siswa Baru :</p>
+                        <p class="mt-3"><b>I. Pembayaran Pendaftaran</b></p>
+                        <ul class="mt-2 list-disc list-inside">
+                            <li>Nama Bank : {{$spmb_siswa->bank}}</li>
+                            <li>No Virtual Account : {{$spmb_siswa->VA}}</li>
+                            <li>Biaya : {{$spmb_siswa->biaya}}</li>
+                        </ul>
+                        {!! $deskripsi !!}
+                        <a href="{{ route('spmb.cetak.hasil', $spmb_siswa->uuid) }}" target="_blank" class="inline-block w-full sm:w-fit mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cetak Kartu Pembayaran</a>
+                    @else
+                        <p class="mt-3 text-justify">DINYATAKAN <b class="text-bold">TIDAK DITERIMA</b> sebagai peserta didik di {{$sekolah->nama}}. Hubungi Pihak Sekolah untuk menindaklanjuti hasil SPMB.</p>
+                    @endif
                 </div>
             </div>
+            @else
+                <div class="col-span-1">
+                    <div class="rounded-lg bg-white shadow-md p-5">
+                        <h5 class="text-base"><b>Hasil SPMB</b></h5>
+                        <p>Pengumuman Penerimaan Siswa Baru untuk Tahun Ajaran yang akan datang belum dibuka. Kami mengimbau orang tua/wali murid dan calon pendaftar untuk mengecek website ini secara berkala guna memperoleh informasi terbaru terkait</p>
+                    </div>
+                </div>
+            @endif
         </div>
     @endif
     

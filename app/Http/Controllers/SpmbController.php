@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SiswaExport;
 use App\Models\Sekolah;
 use App\Models\spmb;
 use App\Models\spmbSettings;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SpmbController extends Controller
 {
@@ -41,6 +43,16 @@ class SpmbController extends Controller
         $sekolah = Sekolah::findOrFail($spmb_siswa->id_sekolah);
         $biodata = unserialize($spmb_siswa->biodata);
         return view('spmb.siswa.detail',compact('spmb_siswa','sekolah','biodata','user'));
+    }
+
+    public function settingsIndex() {
+        $user = Auth::user();
+        if ($user->access == 'superadmin') {
+            $sekolah = Sekolah::all();
+        } else {
+            $sekolah = Sekolah::where('uuid', $user->tingkat)->get();
+        }
+        return view('spmb.setting.sekolah',compact('sekolah'));
     }
 
     public function settings(String $sekolah) {
@@ -83,8 +95,31 @@ class SpmbController extends Controller
             $berkas_spmb = unserialize($berkas->nilai);
         } else {
             $berkas_spmb = array();
-        }   
-        return view('spmb.setting.index',compact('sekolah','formulir','mode_pendaftaran','status','berkas_spmb'));
+        }
+        
+        $interview = spmbSettings::where([
+            ['id_sekolah','=',$sekolah->uuid],
+            ['jenis','=','interview_spmb']
+        ])->first();
+
+        if($interview != null) {
+            $interview_kuestioner = unserialize($interview->nilai);
+        } else {
+            $interview_kuestioner = array();
+        }
+        
+        $desc_hasil = spmbSettings::where([
+            ['id_sekolah','=',$sekolah->uuid],
+            ['jenis','=','deskripsi_hasil_spmb']
+        ])->first();
+
+        if($desc_hasil != null) {
+            $deskripsi = $desc_hasil->nilai;
+        } else {
+            $deskripsi = '';
+        }
+
+        return view('spmb.setting.index',compact('sekolah','formulir','mode_pendaftaran','status','berkas_spmb','interview_kuestioner','deskripsi'));
     }
     /**
      * Store Daftar Formulir yang diisi per sekolah
@@ -278,9 +313,16 @@ class SpmbController extends Controller
         $file = $request->file('file_berkas');
         $filepath = 'spmb/'.$sekolah->kode.'/'.$spmb_siswa->nis;
         $path = Storage::path($filepath);
-        $filename = $spmb_siswa->nis.'_'.$request->nama_berkas.".".$file->getClientOriginalExtension();
+        $date = date('dmYHis');
+        $filename = $spmb_siswa->nis.'_'.$date.'_'.$request->nama_berkas.".".$file->getClientOriginalExtension();
         if(!Storage::exists($filepath)) {
-            Storage::makeDirectory($filepath, 0755, true);
+            $schoolpath = Storage::path('spmb/'.$sekolah->kode);
+            $spmbpath = Storage::path('spmb');
+            umask(002); 
+            Storage::makeDirectory($filepath, 0755,true);
+            chmod($schoolpath, 0755);
+            chmod($spmbpath, 0755);
+            chmod($path, 0755);
         }
         $manager = new ImageManager(new Driver());
         $image = $manager->read($file);
@@ -421,8 +463,11 @@ class SpmbController extends Controller
             'biodata'=>$input,
             'dokumen'=>'',
             'gelombang' => $status['gelombang'],
+            'interview' => null,
             'status'=> 'mendaftar',
-            'va' => 0,
+            'VA' => 0,
+            'biaya' => 0,
+            'bank' => null,
             'keterangan' => null
         ]);
 
@@ -561,6 +606,181 @@ class SpmbController extends Controller
         }
         return redirect()->back()->with('success','Informasi SPMB Berhasil Di Update');
     }
+
+    /**
+     * Admin Download Excel daftar Siswa SPMB
+     */
+    public function cetakDaftarSiswa(String $uuid) {
+        return Excel::download(new SiswaExport($uuid), 'Daftar_Siswa_SPMB.xlsx');
+    }
+
+    /**
+     * Interview Siswa SPMB
+     */
+    public function spmbInterviewIndex() {
+        $user = Auth::user();
+        if ($user->access == 'superadmin') {
+            $sekolah = Sekolah::all();
+        } else {
+            $sekolah = Sekolah::where('uuid', $user->tingkat)->get();
+        }
+        return view('spmb.interview.index',compact('sekolah'));
+    }
+    public function spmbInterviewStore(String $uuid, Request $request) {
+        $sekolah = Sekolah::findOrFail($uuid);
+        $interview_setting = spmbSettings::where([
+            ['id_sekolah','=',$sekolah->uuid],
+            ['jenis','=','interview_spmb']
+        ])->first();
+        if($interview_setting != null) {
+            $kuestioner = unserialize($interview_setting->nilai);
+            array_push($kuestioner,array(
+                'id_kuestioner' => 'kues'.rand(1000,9999),
+                'jenis' => $request->jenis,
+                'kuestioner' => $request->kuestioner,
+                'opsi' => $request->option
+            ));
+            $interview_setting->update([
+                'nilai' => serialize($kuestioner)
+            ]);
+        } else {
+            $kuestioner = array();
+            $id_kuestioner = 'kues'.rand(1000,9999);
+            array_push($kuestioner,array(
+                'id_kuestioner' => $id_kuestioner,
+                'jenis' => $request->jenis,
+                'kuestioner' => $request->kuestioner,
+                'opsi' => $request->option
+            ));
+            spmbSettings::create([
+                'id_sekolah' => $sekolah->uuid,
+                'jenis' => 'interview_spmb',
+                'nilai' => serialize($kuestioner)
+            ]);
+        }
+        return response()->json(['success' => 'Berhasil Menambahkan Kuestioner Interview']);
+    }
+    public function spmbInterviewDelete(String $uuid, Request $request) {
+        $sekolah = Sekolah::findOrFail($uuid);
+        $interview_setting = spmbSettings::where([
+            ['id_sekolah','=',$sekolah->uuid],
+            ['jenis','=','interview_spmb']
+        ])->first();
+        if($interview_setting != null) {
+            $kuestioner = unserialize($interview_setting->nilai);
+            $updated_kuestioner = array();
+            foreach($kuestioner as $item) {
+                if($item['id_kuestioner'] != $request->id_kuestioner) {
+                    array_push($updated_kuestioner, $item);
+                }
+            }
+            if(count($updated_kuestioner) == 0) {
+                $interview_setting->delete();
+            } else {
+                $interview_setting->update([
+                    'nilai' => serialize($updated_kuestioner)
+                ]);
+            }
+        }
+        return response()->json(['success' => 'Berhasil Menghapus Kuestioner Interview']);
+    }
+    public function spmbInterviewShow(String $uuid) {
+        $sekolah = Sekolah::findOrFail($uuid);
+        $spmb_siswa = spmb::where('id_sekolah',$sekolah->uuid)->orderBy('created_at','desc')->get();
+        
+
+        return view('spmb.interview.show',compact('sekolah','spmb_siswa'));
+    }
+
+    public function spmbInterviewEdit(String $uuid) {
+        $idSekolah = spmb::findOrFail($uuid)->id_sekolah;
+        $siswa = spmb::findOrFail($uuid);
+        $sekolah = Sekolah::findOrFail($idSekolah);
+        $kuestioner = spmbSettings::where([
+            ['id_sekolah','=',$idSekolah],
+            ['jenis','=','interview_spmb']
+        ])->first();
+        
+        if($kuestioner != null) {
+            $kuestioner_array = unserialize($kuestioner->nilai);
+        } else {
+            $kuestioner_array = array();
+        }
+
+        if($siswa->interview != null) {
+            $jawaban = unserialize($siswa->interview);
+        } else {
+            $jawaban = array();
+        }
+        return view('spmb.interview.edit',compact('kuestioner_array','sekolah','siswa','jawaban'));
+    }
+
+    public function spmbInterviewUpdate(String $uuid, Request $request) {
+        $spmb_siswa = spmb::findOrFail($uuid);
+        $idSekolah = $spmb_siswa->id_sekolah;
+        $sekolah = Sekolah::findOrFail($idSekolah);
+        $jawaban = serialize($request->jawabanArray);
+        $spmb_siswa->update([
+            'interview' => $jawaban
+        ]);
+        return response()->json(['success' => true, 'message' => 'Berhasil Menyimpan Data Interview']);
+    }
+
+    public function spmbHasilIndex() {
+        $user = Auth::user();
+        if ($user->access == 'superadmin') {
+            $sekolah = Sekolah::all();
+        } else {
+            $sekolah = Sekolah::where('uuid', $user->tingkat)->get();
+        }
+        return view('spmb.hasil.index',compact('sekolah'));
+    }
+    public function spmbHasilShow(String $uuid) {
+        $sekolah = Sekolah::findOrFail($uuid);
+        $spmb_siswa = spmb::where('id_sekolah',$sekolah->uuid)->orderBy('created_at','desc')->get();
+        
+
+        return view('spmb.hasil.show',compact('sekolah','spmb_siswa'));
+    }
+
+    public function spmbHasilUpdate(String $uuid, Request $request) {
+        $spmb_siswa = spmb::findOrFail($uuid);
+        $jenis = $request->jenis;
+        $spmb_siswa->update([
+            $jenis => $request->nilai
+        ]);
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Atur Setting Deskripsi Hasil SPMB
+     */
+    public function spmbdescHasilStore(String $uuid,Request $request) {
+     $sekolah = Sekolah::findOrFail($uuid);
+    
+    $request->validate([
+        'desc_hasil' => 'required'
+    ]);
+    $mode = $request->desc_hasil;
+    
+    $spmbSetting = spmbSettings::where([
+        ['id_sekolah','=',$sekolah->uuid],
+        ['jenis','=','deskripsi_hasil_spmb']
+    ])->first();
+    if($spmbSetting != null) {
+        $spmbSetting->update([
+            'nilai' => $mode
+        ]);
+    } else {
+        spmbSettings::create([
+            'id_sekolah' => $sekolah->uuid,
+            'jenis' => 'deskripsi_hasil_spmb',
+            'nilai' => $mode
+        ]);
+    }
+    return redirect()->route('spmb.settings', $sekolah->uuid)->with('success', 'Mode Pendaftaran berhasil diperbarui.');
+    }
+
     /**
      * SISWA-----------------------------------------------------------------------
      */
@@ -615,9 +835,17 @@ class SpmbController extends Controller
         $file = $request->file('file_berkas');
         $filepath = 'spmb/'.$sekolah->kode.'/'.$user->username;
         $path = Storage::path($filepath);
-        $filename = $user->username.'_'.$request->nama_berkas.".".$file->getClientOriginalExtension();
+        $date = date('dmYHis');
+        $filename = $spmb_siswa->nis.'_'.$date.'_'.$request->nama_berkas.".".$file->getClientOriginalExtension();
         if(!Storage::exists($filepath)) {
-            Storage::makeDirectory($filepath, 0755, true);
+            $schoolpath = Storage::path('spmb/'.$sekolah->kode);
+            $spmbpath = Storage::path('spmb');
+            umask(002); 
+            Storage::makeDirectory($filepath, 0755,true);
+            chmod($schoolpath, 0755);
+            chmod($spmbpath, 0755);
+            chmod($path, 0755);
+            
         }
         $manager = new ImageManager(new Driver());
         $image = $manager->read($file);
@@ -706,5 +934,21 @@ class SpmbController extends Controller
         $sekolah = Sekolah::findOrFail($spmb_siswa->id_sekolah);
         $biodata = unserialize($spmb_siswa->biodata);
         return view('spmb.siswa.detail',compact('spmb_siswa','sekolah','biodata','user'));
+    }
+    /**
+     * Cetak Kartu SPMB Siswa
+     */
+    public function cetakHasilSiswa(String $uuid) {
+        $spmb_siswa = spmb::findOrFail($uuid);
+        $sekolah = Sekolah::findOrFail($spmb_siswa->id_sekolah);
+        $biodata = unserialize($spmb_siswa->biodata);
+        $deskripsi_hasil = spmbSettings::where([['id_sekolah','=',$sekolah->uuid],['jenis','=','deskripsi_hasil_spmb']])->first();
+        if($deskripsi_hasil != null) {
+            $deskripsi = $deskripsi_hasil->nilai;
+        } else {
+            $deskripsi = "";
+        }
+       
+        return view('spmb.siswa.hasil',compact('spmb_siswa','sekolah','biodata','deskripsi'));
     }
 }
