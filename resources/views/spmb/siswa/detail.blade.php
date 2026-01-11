@@ -20,8 +20,8 @@
                         $find = current(array_filter($dokumen,function($item) {
                             return $item['nama_berkas'] == "Foto Siswa";
                         }));
-                        if(isset($find)) {
-                            $gambar = asset('Storage/'.$find['lokasi_berkas']);
+                        if(isset($find) && $find != null) {
+                            $gambar = asset('storage/'.$find['lokasi_berkas']);
                         } else {
                             $gambar = Vite::asset('resources/images/no_image.jpg');
                         }

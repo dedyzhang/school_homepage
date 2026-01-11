@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignUuid('id_sekolah');
             $table->string('nis')->unique();
             $table->string('password');
-            $table->string('biodata');
-            $table->string('dokumen')->nullable();
+            $table->longText('biodata');
+            $table->longText('dokumen')->nullable();
             $table->string('status')->nullable()->default('mendaftar');
             $table->string('VA')->nullable();
             $table->string('keterangan')->nullable();

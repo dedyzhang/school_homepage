@@ -5,10 +5,9 @@
         <h1 class="text-2xl font-bold">SPMB {{$sekolah->kode}}</h1>
         <p class="text-gray-600 italic">Halaman untuk mengatur data SPMB</p>
         <div class="border-b border-b-gray-300 mt-3"></div>
-        <div class="mt-10 col-span-1">
-            <a class="button-d bg-amber-300 hover:bg-amber-400 focus:ring-amber-200" href="{{ route('spmb.settings',$sekolah->uuid) }}">Setting SPMB</a>
-            <a class="button-d bg-blue-400 hover:bg-blue-600 focus:ring-blue-400" href="{{ route('spmb.daftar',$sekolah->uuid) }}">Tambah Siswa</a>
-            <a class="button-d bg-blue-400 hover:bg-blue-600 focus:ring-blue-400" href="{{ route('spmb.informasi',$sekolah->uuid) }}">Informasi SPMB</a>
+        <div class="mt-10">
+            <a class="button-d bg-blue-400 hover:bg-blue-600 focus:ring-blue-400 w-full block sm:inline sm:w-auto mb-1" href="{{ route('spmb.daftar',$sekolah->uuid) }}">Tambah Siswa</a>
+            <a class="button-d bg-green-400 hover:bg-green-600 focus:ring-green-400 w-full block sm:inline sm:w-auto mb-1" href="{{ route('spmb.cetak.siswa',$sekolah->uuid) }}">Cetak Daftar Siswa</a>
         </div>
     </div>
     @if(session('success'))

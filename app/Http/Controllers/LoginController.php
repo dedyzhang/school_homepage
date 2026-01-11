@@ -18,6 +18,7 @@ class LoginController extends Controller
         if($user->access == 'siswa') {
             $sekolah = Sekolah::where('kode', $user->tingkat)->first();
             $berkas_wajib = spmbSettings::where([['id_sekolah','=',$sekolah->uuid],['jenis','=','berkas_spmb']])->first();
+            $deskripsi_hasil = spmbSettings::where([['id_sekolah','=',$sekolah->uuid],['jenis','=','deskripsi_hasil_spmb']])->first();
 
             if($berkas_wajib != null) {
                 $berkas_w = unserialize($berkas_wajib->nilai);
@@ -31,7 +32,13 @@ class LoginController extends Controller
             } else {
                 $berkas_siswa = array();
             }
-            return view('auth.home', compact('user','berkas_w','berkas_siswa'));
+
+            if($deskripsi_hasil != null) {
+                $deskripsi = $deskripsi_hasil->nilai;
+            } else {
+                $deskripsi = "";
+            }
+            return view('auth.home', compact('user','berkas_w','berkas_siswa','spmb_siswa','sekolah','deskripsi'));
         } else {
             return view('auth.home', compact('user'));
         }

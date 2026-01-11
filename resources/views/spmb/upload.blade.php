@@ -112,7 +112,7 @@
                 $.ajax({
                     type: "post",
                     url : url,
-                    headers: {'X-CSRF_TOKEN' : '{{ csrf_token() }}'},
+                    headers: {'X-CSRF-TOKEN' : '{{ csrf_token() }}'},
                     data: {'berkas' : file},
                     success : function(data) {
                         removeLoading();
