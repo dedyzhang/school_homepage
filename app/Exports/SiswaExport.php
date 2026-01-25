@@ -20,7 +20,7 @@ class SiswaExport implements FromView
     }
     public function view() : View
     {
-        $siswa = spmb::where('id_sekolah',$this->params)->orderBy('nama')->orderBy('gelombang')->get();
+        $siswa = spmb::where('id_sekolah',$this->params)->orderBy('created_at')->orderBy('gelombang')->get();
         $formulir = spmbSettings::where([
             ['id_sekolah','=',$this->params],['jenis','=','formulir_spmb']
         ])->first();

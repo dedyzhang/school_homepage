@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InterviewExport;
 use App\Exports\SiswaExport;
 use App\Models\Sekolah;
 use App\Models\spmb;
@@ -612,6 +613,12 @@ class SpmbController extends Controller
      */
     public function cetakDaftarSiswa(String $uuid) {
         return Excel::download(new SiswaExport($uuid), 'Daftar_Siswa_SPMB.xlsx');
+    }
+    /**
+     * Admin Download Excel daftar Siswa SPMB
+     */
+    public function cetakInterviewSiswa(String $uuid) {
+        return Excel::download(new InterviewExport($uuid), 'Hasil_interview_SPMB.xlsx');
     }
 
     /**
