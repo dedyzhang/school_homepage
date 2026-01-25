@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $admin = User::with('sekolah')->get();
+        $admin = User::with('sekolah')->whereIn('access',['admin','superadmin'])->get();
         return view('user.index', compact('admin'));
     }
 

@@ -76,6 +76,7 @@ Route::middleware(isAdminandSuper::class)->controller(SpmbController::class)->gr
     Route::get('/user/spmb/interview/{uuid}/show','spmbInterviewShow')->name('spmb.interview.show');
     Route::get('/user/spmb/interview/{uuid}/edit','spmbInterviewEdit')->name('spmb.interview.edit');
     Route::post('/user/spmb/interview/{uuid}/update','spmbInterviewUpdate')->name('spmb.interview.update');
+    Route::get('/user/spmb/{uuid}/cetak/interview','cetakInterviewSiswa')->name('spmb.cetak.interview');
     Route::get('/user/spmb/hasil','spmbHasilIndex')->name('spmb.hasil.index');
     Route::get('/user/spmb/{uuid}/hasil','spmbHasilShow')->name('spmb.hasil.show');
     Route::post('/user/spmb/hasil/{uuid}/update','spmbHasilUpdate')->name('spmb.hasil.update');

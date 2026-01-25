@@ -6,7 +6,7 @@
         <p class="text-gray-600 italic">Halaman untuk mengatur Interview Siswa SPMB</p>
         <div class="border-b border-b-gray-300 mt-3"></div>
         <div class="mt-10">
-            <a class="button-d bg-green-400 hover:bg-green-600 focus:ring-green-400 w-full block sm:inline sm:w-auto mb-1" href="{{ route('spmb.cetak.siswa',$sekolah->uuid) }}">Cetak Daftar Siswa</a>
+            <a class="button-d bg-green-400 hover:bg-green-600 focus:ring-green-400 w-full block sm:inline sm:w-auto mb-1" href="{{ route('spmb.cetak.interview',$sekolah->uuid) }}">Cetak Hasil Interview</a>
         </div>
     </div>
     @if(session('success'))
@@ -54,7 +54,7 @@
                             $data_siswa = unserialize($siswa->biodata);
                             $nama_siswa = $data_siswa['nama'];
                             $interview = unserialize($siswa->interview);
-                            if(isset($interview)) {
+                            if(isset($interview) && $interview != null) {
                                 $class = "text-green-600";
                                 $status_interview = "Sudah Mengisi Interview";
                             } else {
