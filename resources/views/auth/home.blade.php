@@ -53,6 +53,31 @@
     </div>
     @if ($user->access == 'siswa')
         <div class="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 mt-5 gap-5">
+            @if ($spmb_siswa)
+            <div class="col-span-1 md:col-span-2">
+                <div class="rounded-lg bg-white shadow-md p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-l-4 border-emerald-600">
+                    <div>
+                        <h5 class="text-base font-bold text-gray-900">Formulir & Bukti Pendaftaran SPMB</h5>
+                        <p class="text-sm text-gray-600 mt-1">Anda dapat mencetak formulir biodata pendaftaran dan bukti persetujuan surat pernyataan resmi kapan saja.</p>
+                        <p class="text-xs text-emerald-700 font-medium mt-1">
+                            Nomor Pendaftaran: <b>{{ $spmb_siswa->nis }}</b> | Gelombang: <b>{{ $spmb_siswa->gelombang }}</b>
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 shrink-0">
+                        <a href="{{ route('spmb.siswa.cetak.biodata', $spmb_siswa->uuid) }}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2.5 rounded-lg flex items-center gap-2 shadow transition">
+                            <span class="material-icons-round text-base">print</span>
+                            <span>Cetak Biodata</span>
+                        </a>
+                        @if ($spmb_siswa->pernyataan_setuju || !empty($spmb_siswa->isi_pernyataan))
+                            <a href="{{ route('spmb.siswa.cetak.pernyataan', $spmb_siswa->uuid) }}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm px-4 py-2.5 rounded-lg flex items-center gap-2 shadow transition">
+                                <span class="material-icons-round text-base">description</span>
+                                <span>Cetak Pernyataan</span>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            @endif
             <div class="col-span-1">
                 <div class="rounded-lg bg-white shadow-md p-5">
                     <p class="text-base"><b>Status Upload Berkas</b></p>

@@ -2,14 +2,34 @@
 
 @section('container')
     <div class="p-4 bg-white rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold">SPMB {{$sekolah->kode}}</h1>
-        <p class="text-gray-600 italic">Halaman untuk mengatur data SPMB</p>
-        <div class="border-b border-b-gray-300 mt-3"></div>
-        @if($user->access == 'admin' || $user->access == 'superadmin')
-            <div class="mt-10 col-span-1">
-                <a class="button-d bg-blue-300 hover:bg-blue-400 focus:ring-blue-200" href="">Cetak Formulir</a>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold">SPMB {{$sekolah->kode}}</h1>
+                <p class="text-gray-600 italic">Halaman untuk mengatur data SPMB</p>
             </div>
-        @endif
+            @php
+                $cetakBiodataRoute = ($user->access == 'siswa')
+                    ? route('spmb.siswa.cetak.biodata', $spmb_siswa->uuid)
+                    : route('spmb.cetak.biodata', $spmb_siswa->uuid);
+            @endphp
+            <div class="flex flex-wrap items-center gap-2">
+                <a class="button-d bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 shadow" target="_blank" href="{{ $cetakBiodataRoute }}">
+                    <span class="material-icons-round text-base">print</span>
+                    <span>Cetak Biodata Siswa</span>
+                </a>
+                @if ($spmb_siswa->pernyataan_setuju || !empty($spmb_siswa->isi_pernyataan))
+                    @php
+                        $cetakRoute = ($user->access == 'siswa') 
+                            ? route('spmb.siswa.cetak.pernyataan', $spmb_siswa->uuid) 
+                            : route('spmb.cetak.pernyataan', $spmb_siswa->uuid);
+                    @endphp
+                    <a class="button-d bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-1.5 shadow" target="_blank" href="{{ $cetakRoute }}">
+                        <span class="material-icons-round text-base">description</span>
+                        <span>Cetak Surat Pernyataan</span>
+                    </a>
+                @endif
+            </div>
+        </div>
     </div>
     <div class="p-4 mt-5 bg-white rounded-lg shadow-md">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-y-10">

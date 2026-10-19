@@ -24,7 +24,7 @@
             </div>
         </div>
     @else 
-    <form action="{{ route('home.spmb.store',$sekolah->uuid) }}" method="POST">
+    <form id="form-pendaftaran-spmb" action="{{ route('home.spmb.store',$sekolah->uuid) }}" method="POST">
         @csrf
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 my-15 px-10 sm:px-2 w-full md:w-[85%] mx-auto gap-5">
             <div class="col-span-1 sm:col-span-2 md:col-span-3 text-center mb-10">
@@ -594,15 +594,181 @@
                 @enderror
             </div>
         </div>
-        <div class="grid grid-cols-1 my-10 w-full md:w-[85%] px-10 md:px-0 md:mx-auto gap-5">
-            <div class="col-span-1 gap-3">
-                <button type="submit" class="bg-blue-300 outline-0 border-0 text-blue-950 rounded-lg px-2 py-2 cursor-pointer">Daftar & Kirim Formulir Ke Sekolah</button>
+        @if($status_pernyataan == 'aktif')
+            <div class="grid grid-cols-1 my-10 w-full md:w-[85%] px-10 md:px-0 md:mx-auto gap-5">
+                <div class="col-span-1">
+                    <button type="button" id="btn-lanjut-pernyataan" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-6 py-3.5 cursor-pointer shadow-lg inline-flex items-center gap-2 transition duration-200">
+                        <span class="material-icons-round text-xl">assignment</span>
+                        <span>Lanjut ke Surat Pernyataan</span>
+                        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                    <p class="text-xs text-gray-500 mt-2">Langkah Terakhir: Sebelum pendaftaran berhasil dan akun (NIS & Password) diterbitkan, Anda wajib membaca dan menyetujui Surat Pernyataan.</p>
+                </div>
             </div>
-        </div>
+
+            {{-- Raw Template Template Container --}}
+            <div id="raw-surat-pernyataan" class="hidden">{!! $surat_pernyataan !!}</div>
+
+            {{-- Modal Surat Pernyataan SPMB --}}
+            <div id="modal-pernyataan" class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-5">
+                <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full flex flex-col max-h-[92vh] overflow-hidden my-auto">
+                    {{-- Modal Header --}}
+                    <div class="p-4 sm:p-5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-900">Surat Pernyataan Calon Peserta Didik Baru</h3>
+                            <p class="text-xs text-gray-600 mt-0.5">{{ $sekolah->nama }} &bull; Harap baca dan setujui pernyataan berikut</p>
+                        </div>
+                        <button type="button" id="btn-close-modal-x" class="text-gray-400 hover:text-gray-700 rounded-lg p-1.5 inline-flex items-center cursor-pointer">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+
+                    {{-- Modal Body (Scrollable Statement Document) --}}
+                    <div class="p-4 sm:p-6 overflow-y-auto flex-1 bg-white space-y-4">
+                        <div class="text-xs text-gray-500 italic mb-1 flex items-center gap-1">
+                            <span class="material-icons-round text-sm text-blue-500">info</span>
+                            <span>Periksa kembali surat pernyataan berikut. Data pendaftar telah terisi secara otomatis sesuai input Anda.</span>
+                        </div>
+
+                        <div id="preview-surat-container" class="p-5 sm:p-6 bg-slate-50 border border-slate-200 rounded-lg shadow-inner text-sm leading-relaxed text-gray-800 font-serif">
+                            {{-- JavaScript will render the parsed statement with student details here --}}
+                        </div>
+
+                        {{-- Form Agreement & Signatory Inputs --}}
+                        <div class="p-4 bg-blue-50/80 border border-blue-200 rounded-lg space-y-4 font-sans">
+                            <div>
+                                <label for="nama_penyetuju" class="block text-sm font-bold text-gray-900 mb-1">
+                                    Nama Lengkap Penyetuju / Pencentang <span class="text-red-600">*</span>
+                                </label>
+                                <input type="text" name="nama_penyetuju" id="nama_penyetuju" value="{{ old('nama_penyetuju') }}" placeholder="Contoh: Budi Santoso (Orang Tua / Wali / Calon Siswa)" class="block w-full py-2.5 px-3 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white" required>
+                                @error('nama_penyetuju')
+                                    <p class="mt-1 text-xs text-red-700 font-medium">{{ $message }}</p>
+                                @enderror
+                                <p class="text-[12px] text-gray-600 mt-1">Ketikkan nama lengkap Anda sebagai pihak yang menyatakan dan bertanggung jawab atas persetujuan ini.</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-blue-200">
+                                <label class="flex items-start gap-3 cursor-pointer select-none">
+                                    <input type="checkbox" name="setuju_pernyataan" id="setuju_pernyataan" value="1" @if(old('setuju_pernyataan')) checked @endif class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" required>
+                                    <span class="text-xs sm:text-sm font-semibold text-gray-900 leading-snug">
+                                        Saya menyatakan telah membaca, memahami, dan MENYETUJUI seluruh isi surat pernyataan di atas secara sadar, jujur, dan tanpa paksaan dari pihak manapun.
+                                    </span>
+                                </label>
+                                @error('setuju_pernyataan')
+                                    <p class="mt-1 text-xs text-red-700 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Modal Footer --}}
+                    <div class="p-4 sm:p-5 border-t border-gray-200 bg-gray-50 flex flex-wrap items-center justify-between gap-3">
+                        <button type="button" id="btn-tutup-modal" class="px-4 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg text-sm transition cursor-pointer">
+                            &larr; Kembali ke Formulir
+                        </button>
+                        <button type="submit" id="btn-submit-final" class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-sm shadow-md flex items-center gap-2 cursor-pointer transition">
+                            <span>Setuju & Selesaikan Pendaftaran</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        @else
+            <div class="grid grid-cols-1 my-10 w-full md:w-[85%] px-10 md:px-0 md:mx-auto gap-5">
+                <div class="col-span-1">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-6 py-3.5 cursor-pointer shadow-lg inline-flex items-center gap-2 transition duration-200">
+                        <span>Daftar & Kirim Formulir Ke Sekolah</span>
+                        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </div>
+        @endif
     </form>
     @endif
     <script type="module">
         $('.mask-phone').mask('0000-0000-00000');
         $('#rt_rw').mask('000 / 000');
+
+        @if($status_pernyataan == 'aktif')
+            function formatTanggalIndo(dateStr) {
+                if (!dateStr) return '-';
+                const parts = dateStr.split('-');
+                if (parts.length === 3) {
+                    const bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                    return parseInt(parts[2]) + ' ' + (bulan[parseInt(parts[1])] || parts[1]) + ' ' + parts[0];
+                }
+                return dateStr;
+            }
+
+            function updatePernyataanPreview() {
+                let template = $('#raw-surat-pernyataan').html();
+                const nama = $('#nama').val() || '-';
+                const tempatLahir = $('#tempat_lahir').val() || '-';
+                const tglLahir = formatTanggalIndo($('#tanggal_lahir').val());
+                const jkVal = $('input[name="jk"]:checked').val();
+                const jk = jkVal === 'l' ? 'Laki-Laki' : (jkVal === 'p' ? 'Perempuan' : '-');
+                const nisn = $('#nisn').val() || '-';
+                const agama = $('#agama').val() || '-';
+                const alamat = $('#alamat').val() || '-';
+                const penyetuju = $('#nama_penyetuju').val() || nama;
+                const sekolah = "{{ $sekolah->nama }}";
+                const currentYear = new Date().getFullYear();
+                const tahunAjaran = currentYear + '/' + (currentYear + 1);
+                const now = new Date();
+                const bulanIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                const tglPernyataan = now.getDate() + ' ' + bulanIndo[now.getMonth()] + ' ' + now.getFullYear();
+
+                template = template.replaceAll('[NAMA_SISWA]', nama);
+                template = template.replaceAll('[TEMPAT_LAHIR]', tempatLahir);
+                template = template.replaceAll('[TANGGAL_LAHIR]', tglLahir);
+                template = template.replaceAll('[JENIS_KELAMIN]', jk);
+                template = template.replaceAll('[NISN]', nisn);
+                template = template.replaceAll('[AGAMA]', agama);
+                template = template.replaceAll('[ALAMAT]', alamat);
+                template = template.replaceAll('[SEKOLAH]', sekolah);
+                template = template.replaceAll('[NAMA_SEKOLAH]', sekolah);
+                template = template.replaceAll('[KODE_SEKOLAH]', "{{ $sekolah->kode }}");
+                template = template.replaceAll('[TAHUN_AJARAN]', tahunAjaran);
+                template = template.replaceAll('[TANGGAL_PERNYATAAN]', tglPernyataan);
+                template = template.replaceAll('[NIS]', '-');
+                template = template.replaceAll('[NAMA_PENYETUJU]', penyetuju);
+
+                $('#preview-surat-container').html(template);
+            }
+
+            function bukaModalPernyataan() {
+                const form = document.getElementById('form-pendaftaran-spmb');
+                if (form && !form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+                if (!$('#konfirmasi1').is(':checked') || !$('#konfirmasi2').is(':checked')) {
+                    alert('Silakan centang kedua persetujuan ketentuan dan kebenaran data formulir di bawah terlebih dahulu.');
+                    return;
+                }
+                if (!$('#nama_penyetuju').val()) {
+                    const namaOrtu = $('#nama_ayah').val() || $('#nama_ibu').val() || $('#nama').val();
+                    if (namaOrtu) {
+                        $('#nama_penyetuju').val(namaOrtu);
+                    }
+                }
+                updatePernyataanPreview();
+                $('#modal-pernyataan').removeClass('hidden');
+                $('body').addClass('overflow-hidden');
+            }
+
+            function tutupModalPernyataan() {
+                $('#modal-pernyataan').addClass('hidden');
+                $('body').removeClass('overflow-hidden');
+            }
+
+            $('#btn-lanjut-pernyataan').on('click', bukaModalPernyataan);
+            $('#btn-close-modal-x, #btn-tutup-modal').on('click', tutupModalPernyataan);
+            $('#nama_penyetuju').on('input', updatePernyataanPreview);
+
+            @if($errors->has('nama_penyetuju') || $errors->has('setuju_pernyataan') || old('setuju_pernyataan'))
+                bukaModalPernyataan();
+            @endif
+        @endif
     </script>
 @endsection

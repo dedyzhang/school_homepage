@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\SpmbHelper;
 use App\Models\Berita;
 use App\Models\Sekolah;
 use App\Models\spmb;
@@ -92,7 +93,22 @@ class HomeController extends Controller
                 'gelombang' => null
             );
         }
-        return view('home.spmb.daftar', compact('sekolah','formulir','status'));
+
+        $status_pernyataan_setting = spmbSettings::where([
+            ['id_sekolah', '=', $sekolah->uuid],
+            ['jenis', '=', 'status_pernyataan_spmb']
+        ])->first();
+        $status_pernyataan = ($status_pernyataan_setting && $status_pernyataan_setting->nilai == 'nonaktif') ? 'nonaktif' : 'aktif';
+
+        $pernyataan_setting = spmbSettings::where([
+            ['id_sekolah', '=', $sekolah->uuid],
+            ['jenis', '=', 'surat_pernyataan_spmb']
+        ])->first();
+        $surat_pernyataan = ($pernyataan_setting && !empty($pernyataan_setting->nilai))
+            ? $pernyataan_setting->nilai
+            : SpmbHelper::getDefaultTemplate();
+
+        return view('home.spmb.daftar', compact('sekolah','formulir','status','surat_pernyataan','status_pernyataan'));
     }
     /**
      * Store Pendaftaran SPMB
@@ -123,13 +139,28 @@ class HomeController extends Controller
         if($request->konfirmasi2 == null) {
             $array_validate['konfirmasi2'] = 'required';
         }
+
+        // Cek status toggle surat pernyataan sekolah
+        $status_pernyataan_setting = spmbSettings::where([
+            ['id_sekolah', '=', $sekolah->uuid],
+            ['jenis', '=', 'status_pernyataan_spmb']
+        ])->first();
+        $is_pernyataan_aktif = !($status_pernyataan_setting && $status_pernyataan_setting->nilai == 'nonaktif');
+
+        if ($is_pernyataan_aktif) {
+            $array_validate['nama_penyetuju'] = 'required';
+            $array_validate['setuju_pernyataan'] = 'required';
+        }
         $request->validate($array_validate);
 
-
-        $input = serialize($request->except(['_token','konfirmasi1','konfirmasi2']));
+        $biodata_array = $request->except(['_token','konfirmasi1','konfirmasi2','setuju_pernyataan']);
+        if ($is_pernyataan_aktif) {
+            $biodata_array['nama_penyetuju'] = $request->nama_penyetuju;
+        }
+        $input = serialize($biodata_array);
         $nis = $sekolah->kode.date('y').rand(10000,99999);
 
-        //Ambil Data Gelombang dari Settingan
+        // Ambil Data Gelombang dari Settingan
         $spmbStatus = spmbSettings::where([['id_sekolah','=',$sekolah->uuid],['jenis','=','status']])->first();
         if($spmbStatus != null) {
             $status = unserialize($spmbStatus->nilai);
@@ -139,7 +170,38 @@ class HomeController extends Controller
                 'gelombang' => null
             );
         }
-        spmb::create([
+
+        if ($is_pernyataan_aktif) {
+            // Ambil template surat pernyataan sekolah
+            $pernyataan_setting = spmbSettings::where([
+                ['id_sekolah', '=', $sekolah->uuid],
+                ['jenis', '=', 'surat_pernyataan_spmb']
+            ])->first();
+            $template = ($pernyataan_setting && !empty($pernyataan_setting->nilai))
+                ? $pernyataan_setting->nilai
+                : SpmbHelper::getDefaultTemplate();
+
+            $final_pernyataan = SpmbHelper::renderPernyataan(
+                $template,
+                $biodata_array,
+                $sekolah,
+                $request->nama_penyetuju,
+                $nis,
+                now()
+            );
+
+            $pernyataan_setuju = true;
+            $nama_penyetuju = $request->nama_penyetuju;
+            $tanggal_pernyataan = now();
+            $isi_pernyataan = $final_pernyataan;
+        } else {
+            $pernyataan_setuju = false;
+            $nama_penyetuju = null;
+            $tanggal_pernyataan = null;
+            $isi_pernyataan = null;
+        }
+
+        $spmb = spmb::create([
             'id_sekolah'=> $sekolah->uuid,
             'nis'=> $nis,
             'biodata'=>$input,
@@ -147,7 +209,11 @@ class HomeController extends Controller
             'gelombang' => $status['gelombang'],
             'status'=> 'mendaftar',
             'va' => 0,
-            'keterangan' => null
+            'keterangan' => null,
+            'pernyataan_setuju' => $pernyataan_setuju,
+            'nama_penyetuju' => $nama_penyetuju,
+            'tanggal_pernyataan' => $tanggal_pernyataan,
+            'isi_pernyataan' => $isi_pernyataan,
         ]);
 
         $pass = date('dmY',strtotime($request->tanggal_lahir));
@@ -162,7 +228,7 @@ class HomeController extends Controller
             'token' => '0',
         ]);
         $message = 'Pendaftaran berhasil! Calon Siswa dengan nama '.$request->nama.', NIS anda adalah <b>'.$nis.'</b> dan password awal anda adalah tanggal lahir anda dengan format DDMMYYYY ( Contoh 01 Januari 2007, maka passwordnya 01012007). Silahkan login untuk melengkapi data dan mengunggah dokumen.';
-        return view('home.spmb.success',compact('sekolah','message'));
+        return view('home.spmb.success',compact('sekolah','message','spmb','nis'));
     }
 
     public function spmbStatus(String $sekolah) {
@@ -177,5 +243,31 @@ class HomeController extends Controller
             $total_berkas = 0;
         }
         return view('home.spmb.status',compact('sekolah','spmb_siswa','total_berkas'));
+    }
+
+    public function cetakPernyataanPublic(String $sekolah, String $uuid) {
+        $sekolah = Sekolah::where('uuid', $sekolah)->orWhere('kode', strtoupper($sekolah))->firstOrFail();
+        $spmb_siswa = spmb::where('uuid', $uuid)->where('id_sekolah', $sekolah->uuid)->firstOrFail();
+        $biodata = unserialize($spmb_siswa->biodata);
+
+        if (empty($spmb_siswa->isi_pernyataan)) {
+            $pernyataan_setting = spmbSettings::where([
+                ['id_sekolah', '=', $sekolah->uuid],
+                ['jenis', '=', 'surat_pernyataan_spmb']
+            ])->first();
+            $template = ($pernyataan_setting && !empty($pernyataan_setting->nilai))
+                ? $pernyataan_setting->nilai
+                : SpmbHelper::getDefaultTemplate();
+            $spmb_siswa->isi_pernyataan = SpmbHelper::renderPernyataan(
+                $template,
+                $biodata,
+                $sekolah,
+                $spmb_siswa->nama_penyetuju,
+                $spmb_siswa->nis,
+                $spmb_siswa->tanggal_pernyataan ?? $spmb_siswa->created_at
+            );
+        }
+
+        return view('spmb.cetak.pernyataan', compact('spmb_siswa', 'sekolah', 'biodata'));
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\InterviewExport;
 use App\Exports\SiswaExport;
+use App\Helpers\SpmbHelper;
 use App\Models\Sekolah;
 use App\Models\spmb;
 use App\Models\spmbSettings;
@@ -120,7 +121,26 @@ class SpmbController extends Controller
             $deskripsi = '';
         }
 
-        return view('spmb.setting.index',compact('sekolah','formulir','mode_pendaftaran','status','berkas_spmb','interview_kuestioner','deskripsi'));
+        $pernyataan_setting = spmbSettings::where([
+            ['id_sekolah','=',$sekolah->uuid],
+            ['jenis','=','surat_pernyataan_spmb']
+        ])->first();
+
+        if($pernyataan_setting != null && !empty($pernyataan_setting->nilai)) {
+            $surat_pernyataan = $pernyataan_setting->nilai;
+        } else {
+            $surat_pernyataan = SpmbHelper::getDefaultTemplate();
+        }
+
+        $status_pernyataan_setting = spmbSettings::where([
+            ['id_sekolah', '=', $sekolah->uuid],
+            ['jenis', '=', 'status_pernyataan_spmb']
+        ])->first();
+        $status_pernyataan = ($status_pernyataan_setting && $status_pernyataan_setting->nilai == 'nonaktif') ? 'nonaktif' : 'aktif';
+
+        $kop_surat = SpmbHelper::getKopSurat($sekolah->uuid, $sekolah);
+
+        return view('spmb.setting.index',compact('sekolah','formulir','mode_pendaftaran','status','berkas_spmb','interview_kuestioner','deskripsi','surat_pernyataan','status_pernyataan','kop_surat'));
     }
     /**
      * Store Daftar Formulir yang diisi per sekolah
@@ -785,7 +805,144 @@ class SpmbController extends Controller
             'nilai' => $mode
         ]);
     }
-    return redirect()->route('spmb.settings', $sekolah->uuid)->with('success', 'Mode Pendaftaran berhasil diperbarui.');
+    return redirect()->route('spmb.settings', $sekolah->uuid)->with('success', 'Deskripsi Hasil SPMB berhasil diperbarui.');
+    }
+
+    /**
+     * Store Pengaturan Surat Pernyataan SPMB
+     */
+    public function pernyataanStore(String $uuid, Request $request) {
+        $sekolah = Sekolah::findOrFail($uuid);
+
+        $request->validate([
+            'surat_pernyataan' => 'required'
+        ]);
+
+        $statusPernyataan = ($request->has('status_pernyataan') && $request->status_pernyataan == 'aktif') ? 'aktif' : 'nonaktif';
+
+        $statusSetting = spmbSettings::where([
+            ['id_sekolah', '=', $sekolah->uuid],
+            ['jenis', '=', 'status_pernyataan_spmb']
+        ])->first();
+
+        if ($statusSetting != null) {
+            $statusSetting->update([
+                'nilai' => $statusPernyataan
+            ]);
+        } else {
+            spmbSettings::create([
+                'id_sekolah' => $sekolah->uuid,
+                'jenis' => 'status_pernyataan_spmb',
+                'nilai' => $statusPernyataan
+            ]);
+        }
+
+        $spmbSetting = spmbSettings::where([
+            ['id_sekolah', '=', $sekolah->uuid],
+            ['jenis', '=', 'surat_pernyataan_spmb']
+        ])->first();
+
+        if ($spmbSetting != null) {
+            $spmbSetting->update([
+                'nilai' => $request->surat_pernyataan
+            ]);
+        } else {
+            spmbSettings::create([
+                'id_sekolah' => $sekolah->uuid,
+                'jenis' => 'surat_pernyataan_spmb',
+                'nilai' => $request->surat_pernyataan
+            ]);
+        }
+
+        return redirect()->route('spmb.settings', $sekolah->uuid)->with('success', 'Pengaturan Surat Pernyataan berhasil diperbarui.');
+    }
+
+    /**
+     * Store Pengaturan Kop Surat SPMB
+     */
+    public function spmbSettingsKopStore(Request $request, String $uuid) {
+        $sekolah = Sekolah::findOrFail($uuid);
+
+        $request->validate([
+            'logo_kiri' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'logo_kanan' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'nama_yayasan' => 'nullable|string|max:255',
+            'nama_sekolah' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:500',
+            'kontak' => 'nullable|string|max:255',
+            'email' => 'nullable|string|max:255',
+            'keterangan' => 'nullable|string|max:255',
+        ]);
+
+        $existingKop = SpmbHelper::getKopSurat($sekolah->uuid, $sekolah);
+        $logo_kiri = $existingKop['logo_kiri'];
+        $logo_kanan = $existingKop['logo_kanan'];
+
+        // Hapus logo kiri jika diminta
+        if ($request->has('hapus_logo_kiri') && $request->hapus_logo_kiri == '1') {
+            if ($logo_kiri && Storage::disk('public')->exists($logo_kiri)) {
+                Storage::disk('public')->delete($logo_kiri);
+            }
+            $logo_kiri = null;
+        }
+
+        // Hapus logo kanan jika diminta
+        if ($request->has('hapus_logo_kanan') && $request->hapus_logo_kanan == '1') {
+            if ($logo_kanan && Storage::disk('public')->exists($logo_kanan)) {
+                Storage::disk('public')->delete($logo_kanan);
+            }
+            $logo_kanan = null;
+        }
+
+        // Upload logo kiri
+        if ($request->hasFile('logo_kiri')) {
+            if ($logo_kiri && Storage::disk('public')->exists($logo_kiri)) {
+                Storage::disk('public')->delete($logo_kiri);
+            }
+            $fileKiri = $request->file('logo_kiri');
+            $filenameKiri = 'logo_kiri_' . $sekolah->uuid . '_' . time() . '.' . $fileKiri->getClientOriginalExtension();
+            $logo_kiri = $fileKiri->storeAs('spmb/kop', $filenameKiri, 'public');
+        }
+
+        // Upload logo kanan
+        if ($request->hasFile('logo_kanan')) {
+            if ($logo_kanan && Storage::disk('public')->exists($logo_kanan)) {
+                Storage::disk('public')->delete($logo_kanan);
+            }
+            $fileKanan = $request->file('logo_kanan');
+            $filenameKanan = 'logo_kanan_' . $sekolah->uuid . '_' . time() . '.' . $fileKanan->getClientOriginalExtension();
+            $logo_kanan = $fileKanan->storeAs('spmb/kop', $filenameKanan, 'public');
+        }
+
+        $kopData = [
+            'logo_kiri' => $logo_kiri,
+            'logo_kanan' => $logo_kanan,
+            'nama_yayasan' => $request->nama_yayasan,
+            'nama_sekolah' => $request->nama_sekolah ?: $sekolah->nama,
+            'alamat' => $request->alamat ?: $sekolah->alamat,
+            'kontak' => $request->kontak,
+            'email' => $request->email,
+            'keterangan' => $request->keterangan,
+        ];
+
+        $spmbSetting = spmbSettings::where([
+            ['id_sekolah', '=', $sekolah->uuid],
+            ['jenis', '=', 'kop_surat_spmb']
+        ])->first();
+
+        if ($spmbSetting != null) {
+            $spmbSetting->update([
+                'nilai' => serialize($kopData)
+            ]);
+        } else {
+            spmbSettings::create([
+                'id_sekolah' => $sekolah->uuid,
+                'jenis' => 'kop_surat_spmb',
+                'nilai' => serialize($kopData)
+            ]);
+        }
+
+        return redirect()->route('spmb.settings', $sekolah->uuid)->with('success', 'Pengaturan Kop Surat berhasil disimpan.');
     }
 
     /**
@@ -957,5 +1114,115 @@ class SpmbController extends Controller
         }
        
         return view('spmb.siswa.hasil',compact('spmb_siswa','sekolah','biodata','deskripsi'));
+    }
+
+    /**
+     * Cetak Surat Pernyataan SPMB oleh Admin
+     */
+    public function cetakPernyataan(String $uuid) {
+        $spmb_siswa = spmb::findOrFail($uuid);
+        $sekolah = Sekolah::findOrFail($spmb_siswa->id_sekolah);
+        $biodata = unserialize($spmb_siswa->biodata);
+
+        if (empty($spmb_siswa->isi_pernyataan)) {
+            $pernyataan_setting = spmbSettings::where([
+                ['id_sekolah', '=', $sekolah->uuid],
+                ['jenis', '=', 'surat_pernyataan_spmb']
+            ])->first();
+            $template = ($pernyataan_setting && !empty($pernyataan_setting->nilai))
+                ? $pernyataan_setting->nilai
+                : SpmbHelper::getDefaultTemplate();
+            $spmb_siswa->isi_pernyataan = SpmbHelper::renderPernyataan(
+                $template,
+                $biodata,
+                $sekolah,
+                $spmb_siswa->nama_penyetuju,
+                $spmb_siswa->nis,
+                $spmb_siswa->tanggal_pernyataan ?? $spmb_siswa->created_at
+            );
+        }
+
+        return view('spmb.cetak.pernyataan', compact('spmb_siswa', 'sekolah', 'biodata'));
+    }
+
+    /**
+     * Cetak Surat Pernyataan SPMB oleh Siswa
+     */
+    public function cetakPernyataanSiswa(String $uuid) {
+        $user = Auth::user();
+        $spmb_siswa = spmb::where('uuid', $uuid)->where('nis', $user->username)->firstOrFail();
+        $sekolah = Sekolah::findOrFail($spmb_siswa->id_sekolah);
+        $biodata = unserialize($spmb_siswa->biodata);
+
+        if (empty($spmb_siswa->isi_pernyataan)) {
+            $pernyataan_setting = spmbSettings::where([
+                ['id_sekolah', '=', $sekolah->uuid],
+                ['jenis', '=', 'surat_pernyataan_spmb']
+            ])->first();
+            $template = ($pernyataan_setting && !empty($pernyataan_setting->nilai))
+                ? $pernyataan_setting->nilai
+                : SpmbHelper::getDefaultTemplate();
+            $spmb_siswa->isi_pernyataan = SpmbHelper::renderPernyataan(
+                $template,
+                $biodata,
+                $sekolah,
+                $spmb_siswa->nama_penyetuju,
+                $spmb_siswa->nis,
+                $spmb_siswa->tanggal_pernyataan ?? $spmb_siswa->created_at
+            );
+        }
+
+        return view('spmb.cetak.pernyataan', compact('spmb_siswa', 'sekolah', 'biodata'));
+    }
+
+    /**
+     * Cetak Biodata Siswa SPMB oleh Admin / Panitia
+     */
+    public function cetakBiodataSiswa(String $uuid) {
+        $spmb_siswa = spmb::findOrFail($uuid);
+        $sekolah = Sekolah::findOrFail($spmb_siswa->id_sekolah);
+        $biodata = unserialize($spmb_siswa->biodata);
+
+        // Ambil foto siswa jika ada
+        $foto_siswa = null;
+        if (!empty($spmb_siswa->dokumen)) {
+            $dokumen = unserialize($spmb_siswa->dokumen);
+            if (is_array($dokumen)) {
+                $find = current(array_filter($dokumen, function($item) {
+                    return isset($item['nama_berkas']) && $item['nama_berkas'] == "Foto Siswa";
+                }));
+                if ($find && !empty($find['lokasi_berkas'])) {
+                    $foto_siswa = asset('storage/' . $find['lokasi_berkas']);
+                }
+            }
+        }
+
+        return view('spmb.cetak.biodata', compact('spmb_siswa', 'sekolah', 'biodata', 'foto_siswa'));
+    }
+
+    /**
+     * Cetak Biodata Siswa SPMB oleh Siswa
+     */
+    public function cetakBiodataSiswaOnly(String $uuid) {
+        $user = Auth::user();
+        $spmb_siswa = spmb::where('uuid', $uuid)->where('nis', $user->username)->firstOrFail();
+        $sekolah = Sekolah::findOrFail($spmb_siswa->id_sekolah);
+        $biodata = unserialize($spmb_siswa->biodata);
+
+        // Ambil foto siswa jika ada
+        $foto_siswa = null;
+        if (!empty($spmb_siswa->dokumen)) {
+            $dokumen = unserialize($spmb_siswa->dokumen);
+            if (is_array($dokumen)) {
+                $find = current(array_filter($dokumen, function($item) {
+                    return isset($item['nama_berkas']) && $item['nama_berkas'] == "Foto Siswa";
+                }));
+                if ($find && !empty($find['lokasi_berkas'])) {
+                    $foto_siswa = asset('storage/' . $find['lokasi_berkas']);
+                }
+            }
+        }
+
+        return view('spmb.cetak.biodata', compact('spmb_siswa', 'sekolah', 'biodata', 'foto_siswa'));
     }
 }

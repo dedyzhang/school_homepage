@@ -23,5 +23,9 @@ class spmb extends Model
         'bank',
         'biaya',
         'keterangan',
+        'pernyataan_setuju',
+        'nama_penyetuju',
+        'tanggal_pernyataan',
+        'isi_pernyataan',
     ];
 }

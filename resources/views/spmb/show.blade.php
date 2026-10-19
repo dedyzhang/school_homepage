@@ -71,10 +71,14 @@
                             <td class="px-6 py-3">{{$jumlah_berkas}}</td>
                             <td class="px-6 py-3">{{ $siswa->created_at->format('d M Y H:i') }}</td>
                             <td class="px-6 py-3 gap-1 flex">
-                                <a href="{{ route('spmb.siswa.detail',$siswa->uuid) }}" class="px-2 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 focus:outline-0 focus:ring-5 focus:ring-blue-500 text-white"><span class="material-icons-round" style="font-size:16px">visibility</span></a>
-                                <a href="{{ route('spmb.siswa.get.upload',$siswa->uuid) }}" class="px-2 py-2 rounded-lg bg-green-500 hover:bg-green-700 focus:outline-0 focus:ring-5 focus:ring-green-500 text-white"><span class="material-icons-round" style="font-size:16px">insert_drive_file</span></a>
-                                <a href="{{ route('spmb.edit',$siswa->uuid) }}" class="px-2 py-2 rounded-lg bg-orange-500 hover:bg-orange-700 focus:outline-0 focus:ring-5 focus:ring-orange-500 text-white"><span class="material-icons-round" style="font-size:16px">create</span></a>
-                                <button data-siswa="{{ $siswa->uuid }}" class="hapus-siswa px-2 py-2 rounded-lg bg-red-700 hover:bg-red-900 focus:outline-0 focus:ring-5 focus:ring-red-500 text-white"><span class="material-icons-round" style="font-size:16px">delete</span></a>
+                                <a href="{{ route('spmb.siswa.detail',$siswa->uuid) }}" title="Detail Siswa" class="px-2 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 focus:outline-0 focus:ring-5 focus:ring-blue-500 text-white"><span class="material-icons-round" style="font-size:16px">visibility</span></a>
+                                <a href="{{ route('spmb.cetak.biodata', $siswa->uuid) }}" target="_blank" title="Cetak Biodata Siswa" class="px-2 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-800 focus:outline-0 focus:ring-5 focus:ring-emerald-500 text-white"><span class="material-icons-round" style="font-size:16px">print</span></a>
+                                @if($siswa->pernyataan_setuju || !empty($siswa->isi_pernyataan))
+                                    <a href="{{ route('spmb.cetak.pernyataan', $siswa->uuid) }}" target="_blank" title="Cetak Surat Pernyataan" class="px-2 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-800 focus:outline-0 focus:ring-5 focus:ring-indigo-500 text-white"><span class="material-icons-round" style="font-size:16px">description</span></a>
+                                @endif
+                                <a href="{{ route('spmb.siswa.get.upload',$siswa->uuid) }}" title="Upload Berkas" class="px-2 py-2 rounded-lg bg-green-500 hover:bg-green-700 focus:outline-0 focus:ring-5 focus:ring-green-500 text-white"><span class="material-icons-round" style="font-size:16px">insert_drive_file</span></a>
+                                <a href="{{ route('spmb.edit',$siswa->uuid) }}" title="Edit Data" class="px-2 py-2 rounded-lg bg-orange-500 hover:bg-orange-700 focus:outline-0 focus:ring-5 focus:ring-orange-500 text-white"><span class="material-icons-round" style="font-size:16px">create</span></a>
+                                <button data-siswa="{{ $siswa->uuid }}" title="Hapus Siswa" class="hapus-siswa px-2 py-2 rounded-lg bg-red-700 hover:bg-red-900 focus:outline-0 focus:ring-5 focus:ring-red-500 text-white cursor-pointer"><span class="material-icons-round" style="font-size:16px">delete</span></button>
                             </td>
                         </tr>
                     @endforeach

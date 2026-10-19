@@ -17,12 +17,38 @@
         </div>
     </div>
     @if ($message)
-        <div class="flex justify-center items-center w-[95%] my-25 md:w-[80%] mx-auto px-10 md:px-10 flex-wrap text-center py-20 border border-neutral-800">
-            <h5 class="text-2xl sm:text-3xl md:text-4xl w-full mb-10">Pendaftaran Berhasil !</h5>
-            <p class="text-xl/relaxed mb-5">{!!  $message != null ? $message : ''!!}</p>
+        <div class="flex justify-center items-center w-[95%] my-20 md:w-[80%] mx-auto px-6 md:px-12 flex-wrap text-center py-16 border-2 border-slate-700 bg-white rounded-2xl shadow-xl">
+            <div class="w-full flex justify-center mb-4">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                    <span class="material-icons-round text-4xl text-green-600">check_circle</span>
+                </div>
+            </div>
+            <h5 class="text-2xl sm:text-3xl md:text-4xl w-full mb-6 font-bold text-gray-900">Pendaftaran Berhasil!</h5>
+            <div class="text-lg/relaxed mb-8 max-w-2xl mx-auto text-gray-700 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                {!! $message != null ? $message : '' !!}
+            </div>
 
-            <a href="/user/signin" class="bg-blue-500 text-white border rounded-lg px-2 py-2 mb-10">Klik Disini ke Halaman Login</a>
-            <p class="text-green-700 w-full">Screenshot atau catat NIS dan Password Sebelum ke halaman login.</p>
+            <div class="w-full flex flex-wrap justify-center gap-4 mb-6">
+                @if(isset($spmb) && $spmb != null && $spmb->pernyataan_setuju)
+                    <a href="{{ route('home.spmb.cetak.pernyataan', [$sekolah->uuid, $spmb->uuid]) }}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg px-6 py-3 flex items-center gap-2 shadow-md transition">
+                        <span class="material-icons-round text-xl">print</span>
+                        <span>Cetak Surat Pernyataan</span>
+                    </a>
+                @endif
+                <a href="/user/signin" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-6 py-3 flex items-center gap-2 shadow-md transition">
+                    <span class="material-icons-round text-xl">login</span>
+                    <span>Masuk ke Halaman Login</span>
+                </a>
+            </div>
+            
+            @if(isset($spmb) && $spmb != null && $spmb->pernyataan_setuju)
+                <p class="text-sm text-green-800 font-medium w-full">
+                    * Simpan atau cetak surat pernyataan sebagai tanda bukti bahwa pendaftar telah menyetujui ketentuan pendaftaran.
+                </p>
+            @endif
+            <p class="text-xs text-gray-500 mt-1 w-full">
+                Pastikan Anda telah mencatat atau menyimpan screenshot NIS dan Password di atas sebelum melanjutkan login.
+            </p>
         </div>
     @endif
     <div class="flex justify-center items-center">
