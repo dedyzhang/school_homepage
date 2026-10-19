@@ -227,8 +227,25 @@ class HomeController extends Controller
             'access' => 'siswa',
             'token' => '0',
         ]);
-        $message = 'Pendaftaran berhasil! Calon Siswa dengan nama '.$request->nama.', NIS anda adalah <b>'.$nis.'</b> dan password awal anda adalah tanggal lahir anda dengan format DDMMYYYY ( Contoh 01 Januari 2007, maka passwordnya 01012007). Silahkan login untuk melengkapi data dan mengunggah dokumen.';
-        return view('home.spmb.success',compact('sekolah','message','spmb','nis'));
+        $biodata = $biodata_array;
+        $message = 'Pendaftaran berhasil! Calon Siswa dengan nama '.$request->nama.' telah terdaftar di '.$sekolah->nama.'. Silakan simpan NIS dan Password berikut untuk login ke sistem SPMB.';
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'nis' => $nis,
+                'pass' => $pass,
+                'nama' => $request->nama,
+                'nama_penyetuju' => $nama_penyetuju,
+                'sekolah' => $sekolah->nama,
+                'pernyataan_setuju' => $pernyataan_setuju,
+                'cetak_pernyataan_url' => route('home.spmb.cetak.pernyataan', [$sekolah->uuid, $spmb->uuid]),
+                'login_url' => url('/user/signin?username=' . $nis),
+            ]);
+        }
+
+        return view('home.spmb.success', compact('sekolah', 'message', 'spmb', 'nis', 'pass', 'biodata'));
     }
 
     public function spmbStatus(String $sekolah) {

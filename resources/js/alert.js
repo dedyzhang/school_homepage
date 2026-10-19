@@ -1,8 +1,9 @@
 import $ from "jquery";
 window.jQuery = window.$ = $;
 import jQueryConfirm from "jquery-confirm";
-window.jQuery.alert = window.$.alert = jQueryConfirm;
-window.jQuery.confirm = window.$.confirm = jQueryConfirm;
+if (typeof jQueryConfirm === "function") {
+    jQueryConfirm(window, $);
+}
 
 export function cAlert(type, title, content, reload, redirect) {
     if (type == "green") {
@@ -37,6 +38,9 @@ export function cAlert(type, title, content, reload, redirect) {
     }
 }
 export function oAlert(type, title, content) {
+    if (window.$ && window.$('.jconfirm:visible').length > 0) {
+        return;
+    }
     if (type == "green") {
         var icon = "fa-solid fa-check";
     } else if (type == "orange" || type == "red" || type == "blue") {

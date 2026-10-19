@@ -13,7 +13,6 @@ import { cAlert, oAlert, cConfirm } from "./alert";
 window.cAlert = cAlert;
 window.oAlert = oAlert;
 window.cConfirm = cConfirm;
-cAlert("green", "Berhasil", "Data berhasil dimuat", false, null);
 
 //Loading
 import { loading, removeLoading } from "./loading";

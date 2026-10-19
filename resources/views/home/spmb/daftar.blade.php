@@ -27,23 +27,26 @@
     <form id="form-pendaftaran-spmb" action="{{ route('home.spmb.store',$sekolah->uuid) }}" method="POST">
         @csrf
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 my-15 px-10 sm:px-2 w-full md:w-[85%] mx-auto gap-5">
-            <div class="col-span-1 sm:col-span-2 md:col-span-3 text-center mb-10">
+            <div class="col-span-1 sm:col-span-2 md:col-span-3 text-center mb-6">
                 <h2 class="text-xl sm:text-2xl md:text-3xl font-bold">Formulir Penerimaan Siswa Baru</h2>
+                <div class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-red-50 text-red-700 text-xs rounded-full border border-red-200">
+                    <span class="font-bold text-red-600">*</span> Kolom bertanda bintang merah wajib diisi dengan benar dan lengkap.
+                </div>
             </div>
             <div class="col-span-1 gap-3 grid grid-cols-1">
                 <div class="form-group">
                     <p><b>I. Identitas Pribadi Siswa</b></p>
                 </div>
                 <div class="form-group">
-                    <label for="nama" class="block text-sm @error('nama') text-red-800 @else text-gray-800 @endif mb-1">Nama Lengkap Siswa</label>
+                    <label for="nama" class="block text-sm @error('nama') text-red-800 @else text-gray-800 @endif mb-1">Nama Lengkap Siswa <span class="text-red-600 font-bold">*</span></label>
                     <input type="text" name="nama" id="nama" class="block w-full min-w-0 grow py-1.5 px-3 text-base @error('nama') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror focus:outline-none sm:text-sm/6 rounded-lg  outline-0 focus:border-indigo-500" placeholder="Masukkan Nama Lengkap Siswa" value="{{ old('nama') }}" />
                     @error('nama')
                         <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="jk" class="block text-sm @error('jk') text-red-800 @else text-gray-800 @endif mb-2">Jenis Kelamin Siswa</label>
-                    <div class="flex">
+                    <label for="jk" class="block text-sm @error('jk') text-red-800 @else text-gray-800 @endif mb-2">Jenis Kelamin Siswa <span class="text-red-600 font-bold">*</span></label>
+                    <div id="group-jk" class="flex p-1 rounded-lg transition duration-150">
                         <div class="flex items-center me-4">
                             <input id="lk" type="radio" value="l" name="jk" class="w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border border-default appearance-none" @if(@old('jk') == 'l') checked @endif>
                             <label for="lk" class="select-none ms-2 text-sm font-medium text-heading">Laki-Laki</label>
@@ -52,14 +55,14 @@
                             <input id="pr" type="radio" value="p" name="jk" class="w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border border-default appearance-none" @if(@old('jk') == 'p') checked @endif>
                             <label for="pr" class="select-none ms-2 text-sm font-medium text-heading">Perempuan</label>
                         </div>
-                         @error('jk')
-                            <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
-                        @enderror
                     </div>
+                    @error('jk')
+                        <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
+                    @enderror
                 </div>
                 @if(in_array('nisn',$formulir))
                     <div class="form-group">
-                        <label for="nisn" class="block text-sm @error('nisn') text-red-800 @else text-gray-800 @endif mb-1">Nomor Induk Siswa Nasional (NISN)</label>
+                        <label for="nisn" class="block text-sm @error('nisn') text-red-800 @else text-gray-800 @endif mb-1">Nomor Induk Siswa Nasional (NISN) <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="nisn" id="nisn" class="block w-full min-w-0 grow py-1.5 px-3 text-base @error('nisn') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror focus:outline-none sm:text-sm/6 rounded-lg outline-0 focus:border-indigo-500" placeholder="Masukkan NISN Siswa" value="{{old('nisn')}}" />
                         @error('nisn')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -67,21 +70,21 @@
                     </div>
                 @endif
                 <div class="form-group">
-                    <label for="tempat_lahir" class="block text-sm @error('tempat_lahir') text-red-800 @else text-gray-800 @endif mb-1">Tempat Lahir Siswa</label>
+                    <label for="tempat_lahir" class="block text-sm @error('tempat_lahir') text-red-800 @else text-gray-800 @endif mb-1">Tempat Lahir Siswa <span class="text-red-600 font-bold">*</span></label>
                     <input type="text" name="tempat_lahir" id="tempat_lahir" class="block w-full min-w-0 grow py-1.5 px-3 text-base @error('tempat_lahir') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror focus:outline-none sm:text-sm/6 rounded-lg outline-0 focus:border-indigo-500" placeholder="Masukkan Tempat Lahir Siswa" value="{{old('tempat_lahir')}}" />
                     @error('tempat_lahir')
                         <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="tanggal_lahir" class="block text-sm @error('tanggal_lahir') text-red-800 @else text-gray-800 @endif mb-1">Tanggal Lahir Siswa</label>
+                    <label for="tanggal_lahir" class="block text-sm @error('tanggal_lahir') text-red-800 @else text-gray-800 @endif mb-1">Tanggal Lahir Siswa <span class="text-red-600 font-bold">*</span></label>
                     <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="block w-full min-w-0 grow py-1.5 px-3 text-base @error('tanggal_lahir') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror focus:outline-none sm:text-sm/6 rounded-lg outline-0 focus:border-indigo-500" placeholder="Masukkan Tanggal Lahir Siswa" value="{{old('tanggal_lahir')}}" />
                     @error('tanggal_lahir')
                         <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="agama" class="block text-sm @error('agama') text-red-800 @else text-gray-800 @endif mb-1">Agama Siswa</label>
+                    <label for="agama" class="block text-sm @error('agama') text-red-800 @else text-gray-800 @endif mb-1">Agama Siswa <span class="text-red-600 font-bold">*</span></label>
                     <select name="agama" id="agama" class="block w-full min-w-0 grow py-1.5 px-3 text-base @error('agama') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror focus:outline-none sm:text-sm/6 rounded-lg outline-0 focus:border-indigo-500">
                         <option value="">Pilih salah satu</option>
                         <option value="Buddha" @if(old('agama') == "Buddha") selected @endif>Buddha</option>
@@ -97,7 +100,7 @@
                 </div>
                 @if(in_array('no_handphone',$formulir))
                     <div class="form-group">
-                        <label for="no_handphone" class="block text-sm @error('no_handphone') text-red-800 @else text-gray-800 @endif mb-1">No Handphone Siswa</label>
+                        <label for="no_handphone" class="block text-sm @error('no_handphone') text-red-800 @else text-gray-800 @endif mb-1">No Handphone Siswa <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="no_handphone" id="no_handphone" class="block w-full min-w-0 grow py-1.5 px-3 text-base @error('no_handphone') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror focus:outline-none sm:text-sm/6 rounded-lg outline-0 focus:border-indigo-500 mask-phone" placeholder="Masukkan No Handphone Siswa" value="{{old('no_handphone')}}" />
                         @error('no_handphone')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -107,7 +110,7 @@
         
                 @if(in_array('no_whatsapp',$formulir))
                     <div class="form-group">
-                        <label for="no_whatsapp" class="block text-sm @error('no_whatsapp') text-red-800 @else text-gray-800 @endif mb-1">No Whatsapp Siswa</label>
+                        <label for="no_whatsapp" class="block text-sm @error('no_whatsapp') text-red-800 @else text-gray-800 @endif mb-1">No Whatsapp Siswa <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="no_whatsapp" id="no_whatsapp" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('no_whatsapp') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500 mask-phone" placeholder="Masukkan No Whatsapp Siswa" value="{{ old('no_whatsapp') }}" />
                         @error('no_whatsapp')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -125,7 +128,7 @@
                 @endif
                 @if(in_array('email',$formulir))
                     <div class="form-group">
-                        <label for="email" class="block text-sm @error('email') text-red-800 @else text-gray-800 @endif mb-1">Email Siswa</label>
+                        <label for="email" class="block text-sm @error('email') text-red-800 @else text-gray-800 @endif mb-1">Email Siswa <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="email" id="email" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('email') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Email Siswa" value="{{ old('email') }}" />
                          @error('email')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -134,7 +137,7 @@
                 @endif
                 @if(in_array('tinggi_badan',$formulir))
                     <div class="form-group">
-                        <label for="tinggi_badan" class="block text-sm @error('tinggi_badan') text-red-800 @else text-gray-800 @endif mb-1">Tinggi Badan Siswa (cm)</label>
+                        <label for="tinggi_badan" class="block text-sm @error('tinggi_badan') text-red-800 @else text-gray-800 @endif mb-1">Tinggi Badan Siswa (cm) <span class="text-red-600 font-bold">*</span></label>
                         <input type="number" name="tinggi_badan" id="tinggi_badan" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('tinggi_badan') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Dalam Bentuk Angka Saja" value="{{ old('tinggi_badan') }}" />
                         @error('tinggi_badan')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -143,7 +146,7 @@
                 @endif
                 @if(in_array('berat_badan',$formulir))
                     <div class="form-group">
-                        <label for="berat_badan" class="block text-sm @error('berat_badan') text-red-800 @else text-gray-800 @endif mb-1">Berat Badan Siswa (kg)</label>
+                        <label for="berat_badan" class="block text-sm @error('berat_badan') text-red-800 @else text-gray-800 @endif mb-1">Berat Badan Siswa (kg) <span class="text-red-600 font-bold">*</span></label>
                         <input type="number" name="berat_badan" id="berat_badan" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('berat_badan') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Dalam Bentuk Angka Saja" value="{{ old('berat_badan') }}" />
                          @error('berat_badan')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -152,7 +155,7 @@
                 @endif
                 @if(in_array('whatsapp_ortu',$formulir))
                     <div class="form-group">
-                        <label for="whatsapp_ortu" class="block text-sm @error('whatsapp_ortu') text-red-800 @else text-gray-800 @endif mb-1">Whatsapp Orang Tua</label>
+                        <label for="whatsapp_ortu" class="block text-sm @error('whatsapp_ortu') text-red-800 @else text-gray-800 @endif mb-1">Whatsapp Orang Tua <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="whatsapp_ortu" id="whatsapp_ortu" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('whatsapp_ortu') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500 mask-phone" placeholder="Masukkan Dalam Bentuk Angka Saja" value="{{ old('whatsapp_ortu') }}" />
                         @error('whatsapp_ortu')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -165,7 +168,7 @@
                     <p><b>II. Identitas Tempat Tinggal</b></p>
                 </div>
                 <div class="form-group">
-                    <label for="alamat" class="block text-sm @error('alamat') text-red-800 @else text-gray-800 @endif mb-1">Alamat Siswa</label>
+                    <label for="alamat" class="block text-sm @error('alamat') text-red-800 @else text-gray-800 @endif mb-1">Alamat Siswa <span class="text-red-600 font-bold">*</span></label>
                     <textarea name="alamat" id="alamat" class="block w-full min-w-0 grow py-1.5 px-3 text-base  focus:outline-none sm:text-sm/6 rounded-lg @error('alamat') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Alamat Siswa">{{ old('alamat') }}</textarea>
                     @error('alamat')
                         <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -173,7 +176,7 @@
                 </div>
                 @if(in_array('rt_rw',$formulir))
                     <div class="form-group">
-                        <label for="rt_rw" class="block text-sm @error('rt_rw') text-red-800 @else text-gray-800 @endif mb-1">RT / RW</label>
+                        <label for="rt_rw" class="block text-sm @error('rt_rw') text-red-800 @else text-gray-800 @endif mb-1">RT / RW <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="rt_rw" id="rt_rw" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('rt_rw') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan RT / RW Alamat Siswa" value="{{ old('rt_rw') }}" />
                         @error('rt_rw')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -182,7 +185,7 @@
                 @endif
                 @if(in_array('kelurahan',$formulir))
                     <div class="form-group">
-                        <label for="kelurahan" class="block text-sm @error('kelurahan') text-red-800 @else text-gray-800 @endif mb-1">Kelurahan</label>
+                        <label for="kelurahan" class="block text-sm @error('kelurahan') text-red-800 @else text-gray-800 @endif mb-1">Kelurahan <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="kelurahan" id="kelurahan" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('kelurahan') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Kelurahan Alamat Siswa" value="{{ old('kelurahan') }}" />
                         @error('kelurahan')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -191,7 +194,7 @@
                 @endif
                 @if(in_array('kecamatan',$formulir))
                     <div class="form-group">
-                        <label for="kecamatan" class="block text-sm @error('kecamatan') text-red-800 @else text-gray-800 @endif mb-1">Kecamatan</label>
+                        <label for="kecamatan" class="block text-sm @error('kecamatan') text-red-800 @else text-gray-800 @endif mb-1">Kecamatan <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="kecamatan" id="kecamatan" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('kecamatan') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Kecamatan Alamat Siswa" value="{{ old('kecamatan') }}" />
                         @error('kecamatan')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -200,7 +203,7 @@
                 @endif
                 @if(in_array('kabupaten',$formulir))
                     <div class="form-group">
-                        <label for="kabupaten" class="block text-sm @error('kabupaten') text-red-800 @else text-gray-800 @endif mb-1">Kabupaten/Kota</label>
+                        <label for="kabupaten" class="block text-sm @error('kabupaten') text-red-800 @else text-gray-800 @endif mb-1">Kabupaten/Kota <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="kabupaten" id="kabupaten" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('kabupaten') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Kabupaten/Kota Alamat Siswa" value="{{ old('kabupaten') }}" />
                         @error('kabupaten')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -209,7 +212,7 @@
                 @endif
                 @if(in_array('provinsi',$formulir))
                     <div class="form-group">
-                        <label for="provinsi" class="block text-sm @error('provinsi') text-red-800 @else text-gray-800 @endif mb-1">Provinsi</label>
+                        <label for="provinsi" class="block text-sm @error('provinsi') text-red-800 @else text-gray-800 @endif mb-1">Provinsi <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="provinsi" id="provinsi" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('provinsi') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Provinsi Alamat Siswa" value="{{ old('provinsi') }}" />
                         @error('provinsi')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -218,7 +221,7 @@
                 @endif
                 @if(in_array('tinggal_dengan',$formulir))
                     <div class="form-group">
-                        <label for="tinggal_dengan" class="block text-sm @error('tinggal_dengan') text-red-800 @else text-gray-800 @endif mb-1">Siswa Tinggal dengan</label>
+                        <label for="tinggal_dengan" class="block text-sm @error('tinggal_dengan') text-red-800 @else text-gray-800 @endif mb-1">Siswa Tinggal dengan <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="tinggal_dengan" id="tinggal_dengan" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('tinggal_dengan') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Siswa tinggal dengan siapa" value="{{ old('tinggal_dengan') }}" />
                         @error('tinggal_dengan')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -227,7 +230,7 @@
                 @endif
                 @if(in_array('jarak',$formulir))
                     <div class="form-group">
-                        <label for="jarak" class="block text-sm @error('jarak') text-red-800 @else text-gray-800 @endif mb-1">Jarak Rumah ke Sekolah ( km )</label>
+                        <label for="jarak" class="block text-sm @error('jarak') text-red-800 @else text-gray-800 @endif mb-1">Jarak Rumah ke Sekolah ( km ) <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="jarak" id="jarak" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('tanggal_lahir') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan dalam bentuk angka saja" value="{{ old('jarak') }}" />
                         @error('jarak')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -236,7 +239,7 @@
                 @endif
                 @if(in_array('transportasi',$formulir))
                     <div class="form-group">
-                        <label for="transportasi" class="block text-sm @error('transportasi') text-red-800 @else text-gray-800 @endif mb-1">Alat Transportasi ke sekolah</label>
+                        <label for="transportasi" class="block text-sm @error('transportasi') text-red-800 @else text-gray-800 @endif mb-1">Alat Transportasi ke sekolah <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="transportasi" id="transportasi" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('transportasi') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Menggunakan Apa siswa ke sekolah ?" value="{{ old('transportasi') }}" />
                         @error('transportasi')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -254,7 +257,7 @@
         
                 @if(in_array('regis_akte',$formulir))
                     <div class="form-group">
-                        <label for="regis_akte" class="block text-sm @error('regis_akte') text-red-800 @else text-gray-800 @endif mb-1">No Registrasi Akta Kelahiran Siswa</label>
+                        <label for="regis_akte" class="block text-sm @error('regis_akte') text-red-800 @else text-gray-800 @endif mb-1">No Registrasi Akta Kelahiran Siswa <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="regis_akte" id="regis_akte" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('regis_akte') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan No Registrasi Akta Kelahiran Siswa" value="{{ old('regis_akte') }}" />
                         @error('regis_akte')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -263,7 +266,7 @@
                 @endif
                 @if(in_array('nik',$formulir))
                     <div class="form-group">
-                        <label for="nik" class="block text-sm @error('nik') text-red-800 @else text-gray-800 @endif mb-1">No Induk Kependudukan Siswa</label>
+                        <label for="nik" class="block text-sm @error('nik') text-red-800 @else text-gray-800 @endif mb-1">No Induk Kependudukan Siswa <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="nik" id="nik" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('nik') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Nomor Induk Kependudukan Siswa" value="{{ old('nik'); }}" />
                         @error('nik')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -272,9 +275,9 @@
                 @endif
                 @if(in_array('anak_ke',$formulir))
                     <div class="form-group inline w-full my-2">
-                        <label for="anak_ke" class="text-sm @error('anak_ke') text-red-800 @else text-gray-800 @endif mb-1">Anak Ke</label>
+                        <label for="anak_ke" class="text-sm @error('anak_ke') text-red-800 @else text-gray-800 @endif mb-1">Anak Ke <span class="text-red-600 font-bold">*</span></label>
                         <input type="number" name="anak_ke" id="anak_ke" class="w-30 sm:w-20 md:w-30 min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('anak_ke') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Anak Ke" value="{{ old('anak_ke') }}"/>
-                        <label for="dari_ke" class="text-sm @error('dari_ke') text-red-800 @else text-gray-800 @endif mb-1">Dari</label>
+                        <label for="dari_ke" class="text-sm @error('dari_ke') text-red-800 @else text-gray-800 @endif mb-1">Dari <span class="text-red-600 font-bold">*</span></label>
                         <input type="number" name="dari_ke" id="dari_ke" class="w-30 min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('dari_ke') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Dari" value="{{ old('dari_ke') }}" />
                         @error('anak_ke')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom Anak Ke wajib diisi.</p>
@@ -538,7 +541,7 @@
                 </div>
                 @if(in_array('jenis_pendaftaran',$formulir))
                     <div class="form-group">
-                        <label for="jenis_pendaftaran" class="block text-sm @error('jenis_pendaftaran') text-red-800 @else text-gray-800 @endif mb-1">Jenis Pendaftaran Siswa</label>
+                        <label for="jenis_pendaftaran" class="block text-sm @error('jenis_pendaftaran') text-red-800 @else text-gray-800 @endif mb-1">Jenis Pendaftaran Siswa <span class="text-red-600 font-bold">*</span></label>
                         <select name="jenis_pendaftaran" id="jenis_pendaftaran" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('jenis_pendaftaran') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500">
                             <option value="">Pilih salah satu</option>
                             <option value="Siswa Baru" @if(old('jenis_pendaftaran') == 'Siswa Baru') selected @endif>Siswa Baru</option>
@@ -551,7 +554,7 @@
                 @endif
                 @if(in_array('pindah_ke',$formulir))
                     <div class="form-group">
-                        <label for="pindah_ke" class="block text-sm @error('pindah_ke') text-red-800 @else text-gray-800 @endif mb-1">Pindah Ke Tingkat ( Khusus Pindahan Saja)</label>
+                        <label for="pindah_ke" class="block text-sm @error('pindah_ke') text-red-800 @else text-gray-800 @endif mb-1">Pindah Ke Tingkat ( Khusus Pindahan Saja) <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="pindah_ke" id="pindah_ke" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('pindah_ke') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Pindah ke tingkat" value="{{old('pindah_ke')}}" />
                         @error('pindah_ke')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -560,7 +563,7 @@
                 @endif
                 @if(in_array('sekolah_asal',$formulir))
                     <div class="form-group">
-                        <label for="sekolah_asal" class="block text-sm @error('sekolah_asal') text-red-800 @else text-gray-800 @endif mb-1">Sekolah Asal</label>
+                        <label for="sekolah_asal" class="block text-sm @error('sekolah_asal') text-red-800 @else text-gray-800 @endif mb-1">Sekolah Asal <span class="text-red-600 font-bold">*</span></label>
                         <input type="text" name="sekolah_asal" id="sekolah_asal" class="block w-full min-w-0 grow py-1.5 px-3 text-base focus:outline-none sm:text-sm/6 rounded-lg @error('sekolah_asal') text-red-500 border-red-200 placeholder:text-red-800 @else text-gray-900 placeholder:text-gray-400 border-neutral-300 @enderror outline-0 focus:border-indigo-500" placeholder="Masukkan Ke Sekolah Asal" value="{{old('sekolah_asal')}}" />
                         @error('sekolah_asal')
                             <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Kolom ini wajib diisi.</p>
@@ -571,22 +574,22 @@
             @endif
         </div>
         <div class="grid grid-cols-1 w-full md:w-[85%] px-10 md:px-0 md:mx-auto gap-5">
-            <div class="col-span-1">
+            <div class="col-span-1 konfirmasi-box rounded-lg p-2 transition">
                 <div class="flex">
                     <div class="flex items-center me-4">
                         <input id="konfirmasi1" type="checkbox" value="konfirmasi1" name="konfirmasi1" class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft @error('konfirmasi1') border-red-500 bg-red-100 @enderror" @if(old('konfirmasi1')) checked @endif>
-                        <label for="konfirmasi1" class="select-none ms-2 text-sm font-medium text-heading">Dengan ini saya menyatakan saya sudah membaca ketentuan SPMB dan sudah memahami prosedural SPMB online yang diselenggarakan.</label>
+                        <label for="konfirmasi1" class="select-none ms-2 text-sm font-medium text-heading">Dengan ini saya menyatakan saya sudah membaca ketentuan SPMB dan sudah memahami prosedural SPMB online yang diselenggarakan. <span class="text-red-600 font-bold">*</span></label>
                     </div>
                 </div>
                 @error('konfirmasi1')
                     <p class="mt-1 text-[12px] text-red-700"><span class="font-medium">Perhatian!</span> Anda harus menyetujui ketentuan ini untuk melanjutkan.</p>
                 @enderror
             </div>
-            <div class="col-span-1">
+            <div class="col-span-1 konfirmasi-box rounded-lg p-2 transition">
                 <div class="flex">
                     <div class="flex items-center me-4">
                         <input id="konfirmasi2" type="checkbox" value="konfirmasi2" name="konfirmasi2" class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft @error('konfirmasi2') border-red-500 bg-red-100 @enderror" @if(old('konfirmasi2')) checked @endif>
-                        <label for="konfirmasi2" class="select-none ms-2 text-sm font-medium text-heading">Dengan ini telah mengisi formulir penerimaan siswa baru dengan benar dan lengkap dan sesuai dengan data sebenarnya.</label>
+                        <label for="konfirmasi2" class="select-none ms-2 text-sm font-medium text-heading">Dengan ini telah mengisi formulir penerimaan siswa baru dengan benar dan lengkap dan sesuai dengan data sebenarnya. <span class="text-red-600 font-bold">*</span></label>
                     </div>
                 </div>
                 @error('konfirmasi2')
@@ -610,8 +613,8 @@
             <div id="raw-surat-pernyataan" class="hidden">{!! $surat_pernyataan !!}</div>
 
             {{-- Modal Surat Pernyataan SPMB --}}
-            <div id="modal-pernyataan" class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-5">
-                <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full flex flex-col max-h-[92vh] overflow-hidden my-auto">
+            <div id="modal-pernyataan" class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-5" style="display: none;">
+                <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full flex flex-col max-h-[92vh] overflow-hidden my-auto" onclick="event.stopPropagation();">
                     {{-- Modal Header --}}
                     <div class="p-4 sm:p-5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
                         <div>
@@ -640,7 +643,7 @@
                                 <label for="nama_penyetuju" class="block text-sm font-bold text-gray-900 mb-1">
                                     Nama Lengkap Penyetuju / Pencentang <span class="text-red-600">*</span>
                                 </label>
-                                <input type="text" name="nama_penyetuju" id="nama_penyetuju" value="{{ old('nama_penyetuju') }}" placeholder="Contoh: Budi Santoso (Orang Tua / Wali / Calon Siswa)" class="block w-full py-2.5 px-3 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white" required>
+                                <input type="text" name="nama_penyetuju" id="nama_penyetuju" value="{{ old('nama_penyetuju') }}" placeholder="Contoh: Budi Santoso (Orang Tua / Wali / Calon Siswa)" class="block w-full py-2.5 px-3 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
                                 @error('nama_penyetuju')
                                     <p class="mt-1 text-xs text-red-700 font-medium">{{ $message }}</p>
                                 @enderror
@@ -649,7 +652,7 @@
 
                             <div class="pt-3 border-t border-blue-200">
                                 <label class="flex items-start gap-3 cursor-pointer select-none">
-                                    <input type="checkbox" name="setuju_pernyataan" id="setuju_pernyataan" value="1" @if(old('setuju_pernyataan')) checked @endif class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" required>
+                                    <input type="checkbox" name="setuju_pernyataan" id="setuju_pernyataan" value="1" @if(old('setuju_pernyataan')) checked @endif class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     <span class="text-xs sm:text-sm font-semibold text-gray-900 leading-snug">
                                         Saya menyatakan telah membaca, memahami, dan MENYETUJUI seluruh isi surat pernyataan di atas secara sadar, jujur, dan tanpa paksaan dari pihak manapun.
                                     </span>
@@ -666,7 +669,7 @@
                         <button type="button" id="btn-tutup-modal" class="px-4 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg text-sm transition cursor-pointer">
                             &larr; Kembali ke Formulir
                         </button>
-                        <button type="submit" id="btn-submit-final" class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-sm shadow-md flex items-center gap-2 cursor-pointer transition">
+                        <button type="button" id="btn-submit-final" class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-sm shadow-md flex items-center gap-2 cursor-pointer transition">
                             <span>Setuju & Selesaikan Pendaftaran</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         </button>
@@ -676,7 +679,7 @@
         @else
             <div class="grid grid-cols-1 my-10 w-full md:w-[85%] px-10 md:px-0 md:mx-auto gap-5">
                 <div class="col-span-1">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-6 py-3.5 cursor-pointer shadow-lg inline-flex items-center gap-2 transition duration-200">
+                    <button type="submit" id="btn-submit-langsung" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-6 py-3.5 cursor-pointer shadow-lg inline-flex items-center gap-2 transition duration-200">
                         <span>Daftar & Kirim Formulir Ke Sekolah</span>
                         <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </button>
@@ -685,9 +688,562 @@
         @endif
     </form>
     @endif
+
+    {{-- Modal Sukses Pendaftaran & Kredensial Akun Login (Muncul Tanpa Refresh Halaman) --}}
+    <div id="modal-sukses-kredensial" class="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-5" style="display: none;">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full flex flex-col overflow-hidden my-auto border border-blue-200 animate-in fade-in zoom-in duration-200" onclick="event.stopPropagation();">
+            {{-- Header --}}
+            <div class="p-5 bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white flex items-center gap-3.5">
+                <div class="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center shrink-0 shadow-inner">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <div>
+                    <h3 class="text-lg sm:text-xl font-bold leading-tight">Pendaftaran Berhasil!</h3>
+                    <p class="text-xs text-blue-100 mt-0.5">Akun Login Calon Siswa {{ $sekolah->nama }}</p>
+                </div>
+            </div>
+
+            {{-- Body --}}
+            <div class="p-5 sm:p-6 bg-white space-y-4">
+                <div class="p-3 bg-green-50 border border-green-200 rounded-xl text-xs sm:text-sm text-green-900 flex items-start gap-2.5">
+                    <svg class="w-5 h-5 text-green-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <span>Selamat! Formulir pendaftaran calon peserta didik baru telah berhasil tersimpan di sistem sekolah.</span>
+                    </div>
+                </div>
+
+                <div class="text-xs sm:text-sm text-gray-700 space-y-1 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                    <div>Nama Calon Siswa: <strong id="pop-nama-siswa" class="text-gray-900">-</strong></div>
+                    <div id="pop-penyetuju-wrapper">Surat Pernyataan Disetujui Oleh: <strong id="pop-nama-penyetuju" class="text-gray-900">-</strong></div>
+                </div>
+
+                {{-- KOTAK KREDENSIAL --}}
+                <div class="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl space-y-3.5">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1 flex items-center justify-between">
+                            <span>Username (NIS)</span>
+                            <span class="text-[11px] font-normal text-blue-700">ID Login Masuk</span>
+                        </label>
+                        <div class="flex items-center gap-2 bg-white border border-blue-300 rounded-lg p-2 shadow-xs">
+                            <input type="text" id="pop-username" value="" readonly class="w-full bg-transparent font-mono font-bold text-base sm:text-lg text-blue-900 outline-none border-none p-0 focus:ring-0 select-all cursor-text tracking-wide" />
+                            <button type="button" onclick="salinPopKredensial('pop-username', this)" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-semibold flex items-center gap-1 shadow-xs transition cursor-pointer shrink-0">
+                                <span class="btn-pop-text">Salin</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Password Awal</label>
+                            <span class="text-[11px] text-gray-500 italic">Format DDMMYYYY</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white border border-blue-300 rounded-lg p-2 shadow-xs">
+                            <input type="text" id="pop-password" value="" readonly class="w-full bg-transparent font-mono font-bold text-base sm:text-lg text-gray-900 outline-none border-none p-0 focus:ring-0 select-all cursor-text tracking-wider" />
+                            <button type="button" onclick="togglePopPasswordDisplay(this)" class="p-1 text-gray-400 hover:text-gray-700 rounded transition cursor-pointer" title="Sembunyikan / Tampilkan Password">
+                                <svg id="pop-eye-visible" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                <svg id="pop-eye-hidden" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path></svg>
+                            </button>
+                            <button type="button" onclick="salinPopKredensial('pop-password', this)" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-semibold flex items-center gap-1 shadow-xs transition cursor-pointer shrink-0">
+                                <span class="btn-pop-text">Salin</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-blue-200">
+                        <button type="button" id="btn-salin-pop-semua" onclick="salinPopSemuaDataAkun()" class="w-full py-2 px-3 bg-white hover:bg-blue-50 border border-blue-400 text-blue-700 rounded-lg text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            <span id="btn-salin-pop-text">Salin Semua Informasi Akun</span>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-xs text-amber-800 bg-amber-50 border border-amber-200 p-2.5 rounded-lg leading-relaxed">
+                    <strong>Penting:</strong> Simpan atau catat Username dan Password di atas. Akun ini digunakan untuk login ke portal siswa guna melengkapi berkas dan melihat hasil seleksi.
+                </p>
+            </div>
+
+            {{-- Footer --}}
+            <div class="p-4 sm:p-5 border-t border-gray-200 bg-gray-50 flex flex-wrap items-center justify-end gap-3">
+                <a href="#" id="pop-btn-cetak" target="_blank" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm shadow-sm flex items-center gap-1.5 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    <span>Cetak Surat Pernyataan</span>
+                </a>
+                <a href="#" id="pop-btn-login" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-sm shadow-md flex items-center gap-2 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                    <span>Masuk ke Halaman Login</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .input-wajib-kosong {
+            border: 2px solid #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #991b1b !important;
+            box-shadow: 0 0 0 1px #ef4444 !important;
+        }
+        .input-wajib-kosong::placeholder {
+            color: #f87171 !important;
+        }
+        .box-wajib-kosong {
+            border: 2px solid #ef4444 !important;
+            background-color: #fef2f2 !important;
+            border-radius: 0.5rem;
+        }
+    </style>
+
     <script type="module">
-        $('.mask-phone').mask('0000-0000-00000');
-        $('#rt_rw').mask('000 / 000');
+        try {
+            if ($.fn && $.fn.mask) {
+                $('.mask-phone').mask('0000-0000-00000');
+                $('#rt_rw').mask('000 / 000');
+            }
+        } catch (e) {
+            console.warn('Mask error:', e);
+        }
+
+        // Fungsi menampilkan alert menggunakan jquery-confirm (oAlert / $.alert)
+        function tampilkanAlert(tipe, judul, konten) {
+            if (window.$ && window.$('.jconfirm:visible').length > 0) {
+                return;
+            }
+            if (typeof window.oAlert === 'function') {
+                window.oAlert(tipe, judul, konten);
+            } else if (window.$ && typeof window.$.alert === 'function') {
+                window.$.alert({
+                    type: tipe,
+                    title: judul,
+                    content: konten,
+                    icon: 'fa-solid fa-triangle-exclamation',
+                    useBootstrap: false,
+                });
+            } else {
+                alert(judul + '\n' + konten.replace(/<[^>]*>?/gm, ''));
+            }
+        }
+        window.tampilkanAlert = tampilkanAlert;
+
+        // Fungsi Validasi Seluruh Field Wajib di Formulir
+        function validasiFormulirUtama() {
+            let adaError = false;
+            let $elemenErrorPertama = null;
+            let daftarError = [];
+
+            // Reset seluruh tanda error sebelumnya
+            $('.input-wajib-kosong').removeClass('input-wajib-kosong border-red-500 bg-red-50 text-red-900');
+            $('#group-jk').removeClass('box-wajib-kosong');
+            $('.konfirmasi-box').removeClass('box-wajib-kosong');
+
+            function tandaiError($el, namaKolom, isContainer = false) {
+                adaError = true;
+                daftarError.push(namaKolom);
+                if (isContainer) {
+                    $el.addClass('box-wajib-kosong');
+                } else if ($el && $el.length) {
+                    $el.addClass('input-wajib-kosong');
+                }
+                if (!$elemenErrorPertama && $el && $el.length) {
+                    $elemenErrorPertama = $el;
+                }
+            }
+
+            // 1. Nama Lengkap Siswa
+            const $nama = $('#nama');
+            if ($nama.length && !$.trim($nama.val())) {
+                tandaiError($nama, 'Nama Lengkap Siswa');
+            }
+
+            // 2. Jenis Kelamin Siswa
+            const jkVal = $('input[name="jk"]:checked').val();
+            if (!jkVal) {
+                const $groupJk = $('#group-jk');
+                tandaiError($groupJk, 'Jenis Kelamin Siswa', true);
+            }
+
+            // 3. NISN
+            const $nisn = $('#nisn');
+            if ($nisn.length && !$.trim($nisn.val())) {
+                tandaiError($nisn, 'Nomor Induk Siswa Nasional (NISN)');
+            }
+
+            // 4. Tempat Lahir
+            const $tempatLahir = $('#tempat_lahir');
+            if ($tempatLahir.length && !$.trim($tempatLahir.val())) {
+                tandaiError($tempatLahir, 'Tempat Lahir Siswa');
+            }
+
+            // 5. Tanggal Lahir
+            const $tglLahir = $('#tanggal_lahir');
+            if ($tglLahir.length && !$.trim($tglLahir.val())) {
+                tandaiError($tglLahir, 'Tanggal Lahir Siswa');
+            }
+
+            // 6. Agama
+            const $agama = $('#agama');
+            if ($agama.length && !$agama.val()) {
+                tandaiError($agama, 'Agama Siswa');
+            }
+
+            // 7. No Handphone Siswa
+            const $noHp = $('#no_handphone');
+            if ($noHp.length && !$.trim($noHp.val())) {
+                tandaiError($noHp, 'No Handphone Siswa');
+            }
+
+            // 8. No Whatsapp Siswa
+            const $noWa = $('#no_whatsapp');
+            if ($noWa.length && !$.trim($noWa.val())) {
+                tandaiError($noWa, 'No Whatsapp Siswa');
+            }
+
+            // 9. Email Siswa
+            const $email = $('#email');
+            if ($email.length && !$.trim($email.val())) {
+                tandaiError($email, 'Email Siswa');
+            }
+
+            // 10. Tinggi Badan
+            const $tinggi = $('#tinggi_badan');
+            if ($tinggi.length && !$.trim($tinggi.val())) {
+                tandaiError($tinggi, 'Tinggi Badan Siswa');
+            }
+
+            // 11. Berat Badan
+            const $berat = $('#berat_badan');
+            if ($berat.length && !$.trim($berat.val())) {
+                tandaiError($berat, 'Berat Badan Siswa');
+            }
+
+            // 12. Whatsapp Orang Tua
+            const $waOrtu = $('#whatsapp_ortu');
+            if ($waOrtu.length && !$.trim($waOrtu.val())) {
+                tandaiError($waOrtu, 'Whatsapp Orang Tua');
+            }
+
+            // 13. Alamat Siswa
+            const $alamat = $('#alamat');
+            if ($alamat.length && !$.trim($alamat.val())) {
+                tandaiError($alamat, 'Alamat Siswa');
+            }
+
+            // 14. RT / RW
+            const $rtRw = $('#rt_rw');
+            if ($rtRw.length && !$.trim($rtRw.val())) {
+                tandaiError($rtRw, 'RT / RW Siswa');
+            }
+
+            // 15. Kelurahan
+            const $kelurahan = $('#kelurahan');
+            if ($kelurahan.length && !$.trim($kelurahan.val())) {
+                tandaiError($kelurahan, 'Kelurahan');
+            }
+
+            // 16. Kecamatan
+            const $kecamatan = $('#kecamatan');
+            if ($kecamatan.length && !$.trim($kecamatan.val())) {
+                tandaiError($kecamatan, 'Kecamatan');
+            }
+
+            // 17. Kabupaten/Kota
+            const $kabupaten = $('#kabupaten');
+            if ($kabupaten.length && !$.trim($kabupaten.val())) {
+                tandaiError($kabupaten, 'Kabupaten/Kota');
+            }
+
+            // 18. Provinsi
+            const $provinsi = $('#provinsi');
+            if ($provinsi.length && !$.trim($provinsi.val())) {
+                tandaiError($provinsi, 'Provinsi');
+            }
+
+            // 19. Siswa Tinggal Dengan
+            const $tinggalDengan = $('#tinggal_dengan');
+            if ($tinggalDengan.length && !$.trim($tinggalDengan.val())) {
+                tandaiError($tinggalDengan, 'Siswa Tinggal Dengan');
+            }
+
+            // 20. Jarak Rumah ke Sekolah
+            const $jarak = $('#jarak');
+            if ($jarak.length && !$.trim($jarak.val())) {
+                tandaiError($jarak, 'Jarak Rumah ke Sekolah');
+            }
+
+            // 21. Alat Transportasi
+            const $transportasi = $('#transportasi');
+            if ($transportasi.length && !$.trim($transportasi.val())) {
+                tandaiError($transportasi, 'Alat Transportasi ke Sekolah');
+            }
+
+            // 22. No Registrasi Akta Kelahiran
+            const $regisAkte = $('#regis_akte');
+            if ($regisAkte.length && !$.trim($regisAkte.val())) {
+                tandaiError($regisAkte, 'No Registrasi Akta Kelahiran');
+            }
+
+            // 23. NIK Siswa
+            const $nik = $('#nik');
+            if ($nik.length && !$.trim($nik.val())) {
+                tandaiError($nik, 'No Induk Kependudukan (NIK) Siswa');
+            }
+
+            // 24. Anak Ke & Dari
+            const $anakKe = $('#anak_ke');
+            if ($anakKe.length && !$.trim($anakKe.val())) {
+                tandaiError($anakKe, 'Anak Ke');
+            }
+            const $dariKe = $('#dari_ke');
+            if ($dariKe.length && !$.trim($dariKe.val())) {
+                tandaiError($dariKe, 'Dari (Jumlah Saudara)');
+            }
+
+            // 25. Jenis Pendaftaran
+            const $jenisDaftar = $('#jenis_pendaftaran');
+            if ($jenisDaftar.length && !$jenisDaftar.val()) {
+                tandaiError($jenisDaftar, 'Jenis Pendaftaran Siswa');
+            } else if ($jenisDaftar.val() === 'Mutasi') {
+                const $pindahKe = $('#pindah_ke');
+                if ($pindahKe.length && !$.trim($pindahKe.val())) {
+                    tandaiError($pindahKe, 'Pindah Ke Tingkat');
+                }
+            }
+
+            // 26. Sekolah Asal
+            const $sekolahAsal = $('#sekolah_asal');
+            if ($sekolahAsal.length && !$.trim($sekolahAsal.val())) {
+                tandaiError($sekolahAsal, 'Sekolah Asal');
+            }
+
+            // 27. Persetujuan Ketentuan & Kebenaran Data (Checkboxes)
+            const c1 = $('#konfirmasi1').is(':checked');
+            const c2 = $('#konfirmasi2').is(':checked');
+            if (!c1) {
+                const $box1 = $('#konfirmasi1').closest('.konfirmasi-box');
+                tandaiError($box1, 'Persetujuan Ketentuan SPMB', true);
+            }
+            if (!c2) {
+                const $box2 = $('#konfirmasi2').closest('.konfirmasi-box');
+                tandaiError($box2, 'Pernyataan Kebenaran Data Formulir', true);
+            }
+
+            if (adaError) {
+                // Scroll ke kolom kosong pertama
+                if ($elemenErrorPertama && $elemenErrorPertama.length) {
+                    $('html, body').animate({
+                        scrollTop: $elemenErrorPertama.offset().top - 140
+                    }, 500);
+                    $elemenErrorPertama.focus();
+                }
+
+                // Susun pesan untuk jquery-confirm
+                let pesanHtml = '<div class="text-left text-sm text-gray-700 leading-relaxed">';
+                pesanHtml += '<p class="mb-2 font-semibold text-red-600">Mohon lengkapi seluruh kolom yang bertanda wajib (<span class="text-red-700 font-bold">*</span>) berikut:</p>';
+                pesanHtml += '<ul class="list-disc pl-5 text-xs text-gray-800 space-y-1 max-h-48 overflow-y-auto">';
+                daftarError.forEach(function(item) {
+                    pesanHtml += '<li><strong>' + item + '</strong> belum diisi / disetujui</li>';
+                });
+                pesanHtml += '</ul>';
+                pesanHtml += '<p class="mt-2 text-xs text-gray-500 italic">Kolom yang belum lengkap telah ditandai dengan warna merah.</p>';
+                pesanHtml += '</div>';
+
+                tampilkanAlert('red', 'Kolom Wajib Belum Lengkap', pesanHtml);
+                return false;
+            }
+
+            return true;
+        }
+        window.validasiFormulirUtama = validasiFormulirUtama;
+
+        // Otomatis hilangkan warna merah saat pengguna mulai mengetik atau memilih input
+        $(document).on('input change', '.input-wajib-kosong, input, select, textarea', function() {
+            if ($.trim($(this).val())) {
+                $(this).removeClass('input-wajib-kosong border-red-500 bg-red-50 text-red-900');
+            }
+        });
+        $('input[name="jk"]').on('change', function() {
+            $('#group-jk').removeClass('box-wajib-kosong');
+        });
+        $('#konfirmasi1').on('change', function() {
+            if ($(this).is(':checked')) {
+                $(this).closest('.konfirmasi-box').removeClass('box-wajib-kosong');
+            }
+        });
+        $('#konfirmasi2').on('change', function() {
+            if ($(this).is(':checked')) {
+                $(this).closest('.konfirmasi-box').removeClass('box-wajib-kosong');
+            }
+        });
+
+        function tampilkanModalSukses(data) {
+            $('#pop-nama-siswa').text(data.nama || '-');
+            if (data.nama_penyetuju) {
+                $('#pop-penyetuju-wrapper').show();
+                $('#pop-nama-penyetuju').text(data.nama_penyetuju);
+            } else {
+                $('#pop-penyetuju-wrapper').hide();
+            }
+            $('#pop-username').val(data.nis || '-');
+            $('#pop-password').val(data.pass || '-');
+
+            if (data.pernyataan_setuju && data.cetak_pernyataan_url) {
+                $('#pop-btn-cetak').attr('href', data.cetak_pernyataan_url).removeClass('hidden').show();
+            } else {
+                $('#pop-btn-cetak').addClass('hidden').hide();
+            }
+
+            if (data.login_url) {
+                $('#pop-btn-login').attr('href', data.login_url);
+            } else {
+                $('#pop-btn-login').attr('href', '/user/signin?username=' + encodeURIComponent(data.nis));
+            }
+
+            $('#modal-sukses-kredensial').removeClass('hidden').css('display', 'flex');
+            $('body').addClass('overflow-hidden');
+        }
+        window.tampilkanModalSukses = tampilkanModalSukses;
+
+        function kirimPendaftaranAjax(btnSubmit) {
+            const $btn = $(btnSubmit);
+            const originalHtml = $btn.html();
+            $btn.prop('disabled', true).addClass('opacity-75 cursor-not-allowed').html(`
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Memproses Pendaftaran...</span>
+            `);
+
+            const form = document.getElementById('form-pendaftaran-spmb');
+            const formData = new FormData(form);
+
+            $.ajax({
+                url: $(form).attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                success: function(response) {
+                    if (response && response.success) {
+                        if (typeof window.tutupModalPernyataan === 'function') {
+                            window.tutupModalPernyataan();
+                        }
+                        tampilkanModalSukses(response);
+                    } else {
+                        $btn.prop('disabled', false).removeClass('opacity-75 cursor-not-allowed').html(originalHtml);
+                        tampilkanAlert('red', 'Terjadi Kesalahan', (response && response.message) ? response.message : 'Gagal menyimpan pendaftaran. Silakan coba lagi.');
+                    }
+                },
+                error: function(xhr) {
+                    $btn.prop('disabled', false).removeClass('opacity-75 cursor-not-allowed').html(originalHtml);
+                    if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                        let errorList = '<ul class="list-disc pl-5 text-xs text-red-700 space-y-1">';
+                        for (const key in xhr.responseJSON.errors) {
+                            errorList += '<li>' + xhr.responseJSON.errors[key][0] + '</li>';
+                        }
+                        errorList += '</ul>';
+                        tampilkanAlert('red', 'Kolom Belum Lengkap', errorList);
+                    } else {
+                        tampilkanAlert('red', 'Gagal Memproses', 'Terjadi gangguan saat memproses formulir (' + xhr.status + '). Silakan periksa koneksi dan coba lagi.');
+                    }
+                }
+            });
+        }
+        window.kirimPendaftaranAjax = kirimPendaftaranAjax;
+
+        function salinPopKredensial(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const originalType = input.type;
+            if (input.type === 'password') input.type = 'text';
+            input.select();
+            input.setSelectionRange(0, 99999);
+            try {
+                navigator.clipboard.writeText(input.value).then(() => feedbackSalin(btn)).catch(() => {
+                    document.execCommand('copy');
+                    feedbackSalin(btn);
+                });
+            } catch(e) {
+                document.execCommand('copy');
+                feedbackSalin(btn);
+            }
+            input.type = originalType;
+        }
+        window.salinPopKredensial = salinPopKredensial;
+
+        function feedbackSalin(btn) {
+            if (!btn) return;
+            const $text = $(btn).find('.btn-pop-text');
+            const orig = $text.text();
+            $text.text('Tersalin!');
+            $(btn).removeClass('bg-blue-600 hover:bg-blue-700').addClass('bg-green-600 hover:bg-green-700');
+            setTimeout(() => {
+                $text.text(orig);
+                $(btn).removeClass('bg-green-600 hover:bg-green-700').addClass('bg-blue-600 hover:bg-blue-700');
+            }, 2000);
+        }
+
+        function togglePopPasswordDisplay(btn) {
+            const input = document.getElementById('pop-password');
+            const eyeVis = document.getElementById('pop-eye-visible');
+            const eyeHid = document.getElementById('pop-eye-hidden');
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeVis.classList.remove('hidden');
+                eyeHid.classList.add('hidden');
+            } else {
+                input.type = 'password';
+                eyeVis.classList.add('hidden');
+                eyeHid.classList.remove('hidden');
+            }
+        }
+        window.togglePopPasswordDisplay = togglePopPasswordDisplay;
+
+        function salinPopSemuaDataAkun() {
+            const username = $('#pop-username').val();
+            const password = $('#pop-password').val();
+            const nama = $('#pop-nama-siswa').text();
+            const sekolah = "{{ $sekolah->nama }}";
+            const loginUrl = window.location.origin + '/user/signin?username=' + encodeURIComponent(username);
+
+            const teks = 
+`AKUN PENDAFTARAN SPMB
+Sekolah: ${sekolah}
+Nama Calon Siswa: ${nama}
+Username / NIS: ${username}
+Password: ${password}
+Link Login: ${loginUrl}
+
+Simpan informasi ini dengan baik untuk login ke sistem SPMB.`;
+
+            navigator.clipboard.writeText(teks).then(() => {
+                const $span = $('#btn-salin-pop-text');
+                const orig = $span.text();
+                $span.text('Semua Info Berhasil Tersalin!');
+                $('#btn-salin-pop-semua').removeClass('bg-white text-blue-700').addClass('bg-green-100 text-green-800 border-green-400');
+                setTimeout(() => {
+                    $span.text(orig);
+                    $('#btn-salin-pop-semua').removeClass('bg-green-100 text-green-800 border-green-400').addClass('bg-white text-blue-700');
+                }, 2500);
+            }).catch(() => {
+                alert('Gagal menyalin teks secara otomatis. Silakan salin manual.');
+            });
+        }
+        window.salinPopSemuaDataAkun = salinPopSemuaDataAkun;
+
+        // Submit langsung jika status pernyataan nonaktif
+        $(document).off('click', '#btn-submit-langsung').on('click', '#btn-submit-langsung', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            if (!validasiFormulirUtama()) {
+                return false;
+            }
+            kirimPendaftaranAjax(this);
+        });
 
         @if($status_pernyataan == 'aktif')
             function formatTanggalIndo(dateStr) {
@@ -701,7 +1257,7 @@
             }
 
             function updatePernyataanPreview() {
-                let template = $('#raw-surat-pernyataan').html();
+                let template = $('#raw-surat-pernyataan').html() || '';
                 const nama = $('#nama').val() || '-';
                 const tempatLahir = $('#tempat_lahir').val() || '-';
                 const tglLahir = formatTanggalIndo($('#tanggal_lahir').val());
@@ -736,38 +1292,100 @@
                 $('#preview-surat-container').html(template);
             }
 
+            let isOpeningModal = false;
             function bukaModalPernyataan() {
-                const form = document.getElementById('form-pendaftaran-spmb');
-                if (form && !form.checkValidity()) {
-                    form.reportValidity();
+                if (isOpeningModal) return;
+                isOpeningModal = true;
+                setTimeout(function() {
+                    isOpeningModal = false;
+                }, 500);
+
+                // Validasi seluruh kolom wajib sebelum membuka modal
+                if (!validasiFormulirUtama()) {
                     return;
                 }
-                if (!$('#konfirmasi1').is(':checked') || !$('#konfirmasi2').is(':checked')) {
-                    alert('Silakan centang kedua persetujuan ketentuan dan kebenaran data formulir di bawah terlebih dahulu.');
-                    return;
-                }
-                if (!$('#nama_penyetuju').val()) {
-                    const namaOrtu = $('#nama_ayah').val() || $('#nama_ibu').val() || $('#nama').val();
-                    if (namaOrtu) {
-                        $('#nama_penyetuju').val(namaOrtu);
+
+                if (!$.trim($('#nama_penyetuju').val())) {
+                    const namaAyah = $.trim($('#nama_ayah').val());
+                    const namaIbu = $.trim($('#nama_ibu').val());
+                    const namaWali = $.trim($('#nama_wali').val());
+                    const defaultPenyetuju = namaAyah || namaIbu || namaWali || $.trim($('#nama').val());
+                    if (defaultPenyetuju) {
+                        $('#nama_penyetuju').val(defaultPenyetuju);
                     }
                 }
+
                 updatePernyataanPreview();
-                $('#modal-pernyataan').removeClass('hidden');
+                $('#modal-pernyataan').removeClass('hidden').css('display', 'flex');
                 $('body').addClass('overflow-hidden');
             }
 
             function tutupModalPernyataan() {
-                $('#modal-pernyataan').addClass('hidden');
+                $('#modal-pernyataan').addClass('hidden').css('display', 'none');
                 $('body').removeClass('overflow-hidden');
             }
 
-            $('#btn-lanjut-pernyataan').on('click', bukaModalPernyataan);
-            $('#btn-close-modal-x, #btn-tutup-modal').on('click', tutupModalPernyataan);
-            $('#nama_penyetuju').on('input', updatePernyataanPreview);
+            // Expose globally so onclick attributes work seamlessly
+            window.bukaModalPernyataan = bukaModalPernyataan;
+            window.tutupModalPernyataan = tutupModalPernyataan;
+
+            $(document).off('click', '#btn-lanjut-pernyataan').on('click', '#btn-lanjut-pernyataan', function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                bukaModalPernyataan();
+            });
+
+            $('#btn-close-modal-x, #btn-tutup-modal').on('click', function(e) {
+                e.preventDefault();
+                tutupModalPernyataan();
+            });
+
+            $('#modal-pernyataan').on('click', function(e) {
+                if (e.target === this) {
+                    tutupModalPernyataan();
+                }
+            });
+
+            $(document).on('keydown', function(e) {
+                if (e.key === 'Escape' && $('#modal-pernyataan').is(':visible')) {
+                    tutupModalPernyataan();
+                }
+            });
+
+            $('#nama_penyetuju').on('input', function() {
+                $(this).removeClass('input-wajib-kosong');
+                updatePernyataanPreview();
+            });
+            $('#setuju_pernyataan').on('change', function() {
+                $(this).closest('label').removeClass('box-wajib-kosong p-2');
+            });
+
+            $('#btn-submit-final').on('click', function(e) {
+                e.preventDefault();
+                const penyetuju = $.trim($('#nama_penyetuju').val());
+                const setuju = $('#setuju_pernyataan').is(':checked');
+
+                if (!penyetuju) {
+                    $('#nama_penyetuju').addClass('input-wajib-kosong');
+                    tampilkanAlert('red', 'Nama Penyetuju Wajib Diisi', 'Silakan masukkan Nama Lengkap Penyetuju / Pencentang pada formulir persetujuan.');
+                    $('#nama_penyetuju').focus();
+                    return false;
+                }
+
+                if (!setuju) {
+                    $('#setuju_pernyataan').closest('label').addClass('box-wajib-kosong p-2');
+                    tampilkanAlert('red', 'Persetujuan Wajib Dicentang', 'Anda wajib membaca dan mencentang kotak pernyataan persetujuan di bawah ini sebelum menyelesaikan pendaftaran.');
+                    $('#setuju_pernyataan').focus();
+                    return false;
+                }
+
+                kirimPendaftaranAjax(this);
+            });
 
             @if($errors->has('nama_penyetuju') || $errors->has('setuju_pernyataan') || old('setuju_pernyataan'))
-                bukaModalPernyataan();
+                setTimeout(function() {
+                    bukaModalPernyataan();
+                }, 100);
             @endif
         @endif
     </script>

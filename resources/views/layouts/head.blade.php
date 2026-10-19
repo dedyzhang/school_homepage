@@ -7,6 +7,7 @@
  <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
  <link rel="shortcut icon" href="{{ Vite::asset('resources/images/logo.png') }}" type="image/x-icon">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
 <script src="https://cdn.jsdelivr.net/npm/tinymce@6.0.0/tinymce.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@wiris/mathtype-tinymce6@8.10.0/plugin.min.js"></script>

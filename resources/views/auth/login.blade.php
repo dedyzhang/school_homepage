@@ -37,6 +37,14 @@
                     </button>
                 </div>
             @endif
+            @if(request('username'))
+                <div class="p-3 mb-3 text-xs text-blue-800 rounded-lg bg-blue-50 border border-blue-200 flex items-start gap-2">
+                    <i class="material-icons-outlined text-blue-600 text-base">info</i>
+                    <div>
+                        <span class="font-bold">Akun Pendaftaran SPMB:</span> Username/NIS Anda telah terisi. Masukkan <strong>Password</strong> Anda (tanggal lahir: DDMMYYYY) untuk login.
+                    </div>
+                </div>
+            @endif
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="grid w-full gap-2 mt-3">
@@ -46,7 +54,7 @@
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                 <i class="material-icons-outlined text-gray-400" style="font-size:20px">account_circle</i>
                             </div>
-                            <input type="text" class="@error('username') bg-red-50 border border-red-500 text-red-900 placeholder-red-700 focus:ring-red-200 focus:border-red-500 @else bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-200 focus:border-blue-500 @enderror text-sm rounded-lg  focus:outline-0 block w-full ps-10 p-2.5" placeholder="Masukkan NIS (Siswa) atau NIK (Guru)" name="username" id="username" value="{{ old('username') }}" />
+                            <input type="text" class="@error('username') bg-red-50 border border-red-500 text-red-900 placeholder-red-700 focus:ring-red-200 focus:border-red-500 @else bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-200 focus:border-blue-500 @enderror text-sm rounded-lg  focus:outline-0 block w-full ps-10 p-2.5" placeholder="Masukkan NIS (Siswa) atau NIK (Guru)" name="username" id="username" value="{{ old('username', request('username')) }}" />
 
                         </div>
                         @error('username')
